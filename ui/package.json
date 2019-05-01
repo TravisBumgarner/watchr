@@ -8,15 +8,20 @@
     },
     "scripts": {
         "start:ui": "NODE_ENV=development webpack-dev-server  --mode=development --open --hot --inline --config webpack.js",
-        "storybook": "start-storybook"
+        "storybook": "start-storybook",
+        "test": "jest -c ./jest.config.js"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "@babel/plugin-proposal-class-properties": "^7.4.4",
+        "babel-jest": "^24.7.1",
+        "babel-plugin-require-context-hook": "^1.0.0",
+        "jest": "^24.7.1",
         "react": "^16.8.6",
         "react-dom": "^16.8.6",
         "react-router-dom": "^5.0.0",
+        "react-test-renderer": "^16.8.6",
         "styled-components": "^4.2.0"
     },
     "devDependencies": {

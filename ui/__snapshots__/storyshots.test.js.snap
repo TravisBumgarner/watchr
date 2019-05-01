@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots sharedComponents / Button / interactive disabled 1`] = `
+<button
+  className="sc-bdVaJa ejFpXP"
+  disabled={true}
+  onClick={[Function]}
+>
+  Disabled
+</button>
+`;
+
+exports[`Storyshots sharedComponents / Button / interactive enabled 1`] = `
+<button
+  className="sc-bdVaJa ejFpXP"
+  onClick={[Function]}
+>
+  Enabled
+</button>
+`;
+
+exports[`Storyshots sharedComponents / Button / sizes large 1`] = `
+<button
+  className="sc-bdVaJa cAtSUY"
+>
+  Foo Bar
+</button>
+`;
+
+exports[`Storyshots sharedComponents / Button / sizes medium 1`] = `
+<button
+  className="sc-bdVaJa ejFpXP"
+>
+  Foo Bar
+</button>
+`;
+
+exports[`Storyshots sharedComponents / Button / sizes small 1`] = `
+<button
+  className="sc-bdVaJa iiwSEk"
+>
+  Foo Bar
+</button>
+`;
+
+exports[`Storyshots sharedComponents / Text / sizes large 1`] = `
+<p
+  className="sc-bwzfXH bQbuiF"
+>
+  Foo Bar
+</p>
+`;
+
+exports[`Storyshots sharedComponents / Text / sizes medium 1`] = `
+<p
+  className="sc-bwzfXH jnmVrV"
+>
+  Foo Bar
+</p>
+`;
+
+exports[`Storyshots sharedComponents / Text / sizes small 1`] = `
+<p
+  className="sc-bwzfXH iuIVeY"
+>
+  Foo Bar
+</p>
+`;
