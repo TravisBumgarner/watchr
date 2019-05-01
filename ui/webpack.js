@@ -37,13 +37,6 @@ module.exports = {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, '../api/dist')
     },
-    resolve: {
-        alias: {
-            SharedComponents: path.resolve(__dirname, 'src/sharedComponents/'),
-            Theme: path.resolve(__dirname, 'src/theme.js'),
-            Content: path.resolve(__dirname, 'src/content')
-        }
-    },
     devServer: {
         publicPath: '/',
         contentBase: './dist',
