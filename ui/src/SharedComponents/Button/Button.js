@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const Button = styled(({ onClick, disabled, size = 'medium', children, className }) => {
     return (
         <button onClick={onClick} disabled={disabled} className={className}>
-            {children}
+            {children} Lull
         </button>
     )
 })`
