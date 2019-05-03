@@ -1,18 +1,16 @@
 const path = require('path')
 var webpack = require('webpack')
 
-let mediaPath
-let publicPath
+let baseApiUrl
 setupEnv = () => {
     console.log(process.env.NODE_ENV)
     switch (process.env.NODE_ENV) {
         case 'development':
-            mediaPath = "'http://localhost:3002/media/'"
-            publicPath = '/'
+            baseApiUrl = '"http://localhost:8000"'
             break
+        case 'production':
         default:
-            mediaPath = "'https://travisbumgarner.com/media/'"
-            publicPath = '/static'
+            baseApiUrl = '"http://localhost:8000"'
     }
 }
 setupEnv()
@@ -40,6 +38,11 @@ module.exports = {
         port: 3000,
         historyApiFallback: true
     },
+    resolve: {
+        alias: {
+            SharedComponents: path.resolve(__dirname, 'src/SharedComponents/')
+        }
+    },
     devtool: '',
     plugins: [
         new webpack.DefinePlugin({
@@ -47,6 +50,6 @@ module.exports = {
                 NODE_ENV: JSON.stringify('production')
             }
         }),
-        new webpack.DefinePlugin({ __API__: mediaPath })
+        new webpack.DefinePlugin({ __BASE_API_URL__: baseApiUrl })
     ]
 }

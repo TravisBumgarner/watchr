@@ -1,12 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Button = styled(({ onClick, disabled, size = 'medium', children, className }) => {
-    return (
-        <button onClick={onClick} disabled={disabled} className={className}>
-            {children} Lull
-        </button>
-    )
+const Button = styled(({ children, ...rest }) => {
+    return <button {...rest}>{children}</button>
 })`
     ${props => {
         switch (props.size) {
