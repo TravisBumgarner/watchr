@@ -1,6 +1,6 @@
 import * as Knex from 'knex'
 
-import { create } from '../users'
+import { create } from '../user'
 
 exports.seed = (knex: Knex) => {
     return knex('users')

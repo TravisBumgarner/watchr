@@ -1,4 +1,4 @@
-import * as users from './users'
+import * as user from './user'
 import knex from './knex'
 
-export { users, knex }
+export { user, knex }
