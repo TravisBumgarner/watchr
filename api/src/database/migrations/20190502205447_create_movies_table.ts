@@ -6,7 +6,6 @@ export async function up(knex: Knex): Promise<any> {
         table.text('original_title')
         table.boolean('adult')
         table.boolean('video')
-        table.text('name')
         table.float('popularity')
     })
 }
