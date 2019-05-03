@@ -4,24 +4,36 @@ import axios from 'axios'
 import { Button, Input } from 'SharedComponents'
 
 const Register = () => {
-    const [username, setUsername] = React.useState('')
+    const [firstName, setFirstName] = React.useState('')
+    const [lastName, setLastName] = React.useState('')
+    const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
 
     const handleSubmit = () => {
         axios
             .post(`${__BASE_API_URL__}/register`, {
                 password,
-                username
+                first_name: firstName,
+                last_name: lastName,
+                email
             })
             .then(() => {
-                setUsername('')
+                setFirstName('')
+                setLastName('')
+                setEmail('')
                 setPassword('')
             })
     }
 
     return (
         <div>
-            <Input onChange={setUsername} value={username} />
+            First Name:
+            <Input onChange={setFirstName} value={firstName} />
+            Last Name:
+            <Input onChange={setLastName} value={lastName} />
+            Email:
+            <Input onChange={setEmail} value={email} />
+            Password:
             <Input type="password" onChange={setPassword} value={password} />
             <Button onClick={handleSubmit}>Register</Button>
         </div>
