@@ -6,3 +6,5 @@ config.ts
 # Python
 *.pyc
 
+# Mac
+.DS_Store
