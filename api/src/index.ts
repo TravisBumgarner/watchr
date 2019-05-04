@@ -6,43 +6,43 @@ var sessions = require('client-sessions')
 const database = require('./database')
 
 const app = express()
-app.use(cors({ credentials: true, origin: 'http://127.0.0.1:3000' }))
+app.use(cors({ credentials: true }))
 app.use(bodyParser.json())
-app.use(
-    sessions({
-        cookieName: 'session',
-        secret: 'somecrazykeythatyoushouldkeephidden',
-        duration: 60 * 60 * 1000,
-        activeDuration: 1000 * 60 * 5,
-        cookie: {
-            maxAge: 60000,
-            httpOnly: false,
-            secure: false,
-            domain: 'http://127.0.0.1:3000'
-        }
-    })
-)
+// app.use(
+//     sessions({
+//         cookieName: 'session',
+//         secret: 'somecrazykeythatyoushouldkeephidden',
+//         duration: 60 * 60 * 1000,
+//         activeDuration: 1000 * 60 * 5,
+//         cookie: {
+//             maxAge: 60000,
+//             httpOnly: false,
+//             secure: false,
+//             domain: 'localhost:3000'
+//         }
+//     })
+// )
 
-app.use(function(request: any, response: any, next: any) {
-    if (request.session.seenyou) {
-        response.setHeader('X-Seen-You', 'true')
-    } else {
-        request.session.seenyou = true
-        response.setHeader('X-Seen-You', 'false')
-    }
-    next()
-})
+// app.use(function(request: any, response: any, next: any) {
+//     if (request.session.seenyou) {
+//         response.setHeader('X-Seen-You', 'true')
+//     } else {
+//         request.session.seenyou = true
+//         response.setHeader('X-Seen-You', 'false')
+//     }
+//     next()
+// })
 
-app.use((request: any, response: any, next: any) => {
-    const path = request.originalUrl
-    if (request.session.user) {
-        console.log('session')
-        console.log(request.session)
-    } else {
-        console.log('no session')
-    }
-    next()
-})
+// app.use((request: any, response: any, next: any) => {
+//     const path = request.originalUrl
+//     if (request.session.user) {
+//         console.log('session')
+//         console.log(request.session)
+//     } else {
+//         console.log('no session')
+//     }
+//     next()
+// })
 
 app.get('/ok', function(request: any, response: any) {
     return response.send('ok')
@@ -50,6 +50,10 @@ app.get('/ok', function(request: any, response: any) {
 
 app.get('/', function(request: any, response: any) {
     return response.send('home')
+})
+
+app.get('/movies', (request: any, response: any) => {
+    database.movie.getList().then((movies: any) => response.send({ success: true, data: movies }))
 })
 
 app.post('/login', async (request: any, response: any) => {

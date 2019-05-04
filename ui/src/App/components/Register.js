@@ -11,7 +11,7 @@ const Register = () => {
 
     const handleSubmit = () => {
         axios
-            .post(`${__BASE_API_URL__}/register`, {
+            .post(`${__API__}/register`, {
                 password,
                 first_name: firstName,
                 last_name: lastName,

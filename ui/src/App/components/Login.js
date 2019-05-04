@@ -10,7 +10,7 @@ const Login = () => {
     const handleSubmit = () => {
         axios
             .post(
-                `${__BASE_API_URL__}/login`,
+                `${__API__}/login`,
                 {
                     password,
                     email

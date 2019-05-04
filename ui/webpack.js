@@ -40,7 +40,9 @@ module.exports = {
     },
     resolve: {
         alias: {
-            SharedComponents: path.resolve(__dirname, 'src/SharedComponents/')
+            SharedComponents: path.resolve(__dirname, 'src/SharedComponents/'),
+            config: path.resolve(__dirname, 'config.js'),
+            utilities: path.resolve(__dirname, 'src/utilities')
         }
     },
     devtool: '',
@@ -50,6 +52,6 @@ module.exports = {
                 NODE_ENV: JSON.stringify('production')
             }
         }),
-        new webpack.DefinePlugin({ __BASE_API_URL__: baseApiUrl })
+        new webpack.DefinePlugin({ __API__: baseApiUrl })
     ]
 }
