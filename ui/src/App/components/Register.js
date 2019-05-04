@@ -11,9 +11,11 @@ const Register = ({ toggleLogin }) => {
 
     const handleSubmit = () => {
         axios
-            .post(`${__API__}/Register`, {
+            .post(`${__API__}/register`, {
                 password,
-                email
+                email,
+                first_name: firstName,
+                last_name: lastName
             })
             .then(response => {
                 sessionStorage.setItem('jwtToken', response.data.token)

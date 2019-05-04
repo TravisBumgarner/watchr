@@ -9,9 +9,7 @@ const App = () => {
     const [login, toggleLogin] = useState(false)
     const loadUserFromToken = () => {
         const token = sessionStorage.getItem('jwtToken')
-        console.log('token', token)
-        if (!token || token === '' || typeof token === 'undefined') {
-            console.log('i return')
+        if (!token || token === '') {
             return
         } else {
             axios
