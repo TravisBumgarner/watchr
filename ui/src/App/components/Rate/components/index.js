@@ -1,3 +1,3 @@
-import Card from './Card'
+import MovieCard from './MovieCard'
 
-export { Card }
+export { MovieCard }

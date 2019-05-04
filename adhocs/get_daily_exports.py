@@ -33,7 +33,7 @@ def main():
         print(url)
         response = requests.get(url)
         data = gzip_to_arrays(response.content)
-        for row in data[0:5]:
+        for row in data[0:100]:
 
             insert_into_db(
                 content_type=content_type,

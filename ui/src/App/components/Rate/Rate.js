@@ -2,8 +2,14 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
 
-import { Card } from './components'
+import { MovieCard } from './components'
 import { Queue } from 'utilities'
+
+const CardWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+`
 
 const DownVoteButton = styled.button`
     position: fixed;
@@ -109,7 +115,9 @@ class Rate extends Component {
                 <div>
                     <DownVoteButton onClick={() => this.recordLiked(false)}>Down</DownVoteButton>
                     <UpVoteButton onClick={() => this.recordLiked(true)}>Up</UpVoteButton>
-                    <Card>{currentItem.original_title}</Card>
+                    <CardWrapper>
+                        <MovieCard id={currentItem.id} />
+                    </CardWrapper>
                 </div>
             )
         }
