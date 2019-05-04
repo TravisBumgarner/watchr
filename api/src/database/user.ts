@@ -20,11 +20,16 @@ const create = async ({ first_name, last_name, password, email }: NewUserType) =
     return dbResponse
 }
 
-const findByEmail = async (email: string): Promise<boolean> => {
+// TODO: what is this return type and also await wtf
+const findByEmail = async (email: string) => {
     const dbResponse = await knex('users')
         .select('*')
         .where('email', email)
-    return dbResponse
+    if ((await dbResponse.length) === 1) {
+        return await dbResponse[0]
+    } else {
+        return null
+    }
 }
 
 export { create, findByEmail }
