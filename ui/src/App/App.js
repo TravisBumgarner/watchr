@@ -14,6 +14,8 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
 const App = () => {
     const [user, setUser] = useState(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
+
     const loadUserFromToken = () => {
         const token = sessionStorage.getItem('jwtToken')
         if (!token || token === '') {
@@ -30,6 +32,7 @@ const App = () => {
                     }
                 })
                 .catch(error => console.log(error))
+                .finally(() => setIsLoading(false))
         }
     }
     useEffect(loadUserFromToken, [isAuthenticated])
@@ -38,33 +41,49 @@ const App = () => {
         <>
             <Navigation isAuthenticated={isAuthenticated} />
             <div>{user ? `Welcome, ${user.first_name}` : 'Welcome!'}</div>
-            <Switch>
-                <Route exact path="/" component={Home} />
-                <PrivateRoute isAuthenticated={isAuthenticated} exact user={user} path="/rate" component={Rate} />
-                <Route
-                    exact
-                    path="/login"
-                    render={rest => (
-                        <Login isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} {...rest} />
-                    )}
-                />
-                <Route
-                    exact
-                    path="/register"
-                    render={rest => (
-                        <Register isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} {...rest} />
-                    )}
-                />
-                <PrivateRoute
-                    isAuthenticated={isAuthenticated}
-                    exact
-                    path="/logout"
-                    render={rest => (
-                        <Logout isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} {...rest} />
-                    )}
-                />
-                <Route component={() => <div>Not found</div>} />
-            </Switch>
+            {isLoading ? (
+                <div>Loading...</div>
+            ) : (
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    <PrivateRoute isAuthenticated={isAuthenticated} exact user={user} path="/rate" component={Rate} />
+                    <Route
+                        exact
+                        path="/login"
+                        render={rest => (
+                            <Login
+                                isAuthenticated={isAuthenticated}
+                                setIsAuthenticated={setIsAuthenticated}
+                                {...rest}
+                            />
+                        )}
+                    />
+                    <Route
+                        exact
+                        path="/register"
+                        render={rest => (
+                            <Register
+                                isAuthenticated={isAuthenticated}
+                                setIsAuthenticated={setIsAuthenticated}
+                                {...rest}
+                            />
+                        )}
+                    />
+                    <PrivateRoute
+                        isAuthenticated={isAuthenticated}
+                        exact
+                        path="/logout"
+                        render={rest => (
+                            <Logout
+                                isAuthenticated={isAuthenticated}
+                                setIsAuthenticated={setIsAuthenticated}
+                                {...rest}
+                            />
+                        )}
+                    />
+                    <Route component={() => <div>Not found</div>} />
+                </Switch>
+            )}
         </>
     )
 }
