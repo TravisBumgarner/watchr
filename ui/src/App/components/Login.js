@@ -4,27 +4,32 @@ import axios from 'axios'
 import { Button, Input } from 'SharedComponents'
 
 const Login = () => {
-    const [email, setEmail] = React.useState('')
-    const [password, setPassword] = React.useState('')
+    const [email, setEmail] = React.useState('travis-bumgarner@pluralsight.com')
+    const [password, setPassword] = React.useState('hello123')
 
     const handleSubmit = () => {
         axios
-            .post(`${__BASE_API_URL__}/login`, {
-                password,
-                email
-            })
+            .post(
+                `${__BASE_API_URL__}/login`,
+                {
+                    password,
+                    email
+                },
+                { withCredentials: true }
+            )
             .then(() => {
-                setFirstName('')
-                setLastName('')
                 setEmail('')
                 setPassword('')
+            })
+            .catch(error => {
+                console.log(error)
             })
     }
 
     return (
         <div>
             Email:
-            <Input onChange={setEmail} value={email} />
+            <Input type="email" onChange={setEmail} value={email} />
             Password:
             <Input type="password" onChange={setPassword} value={password} />
             <Button onClick={handleSubmit}>Login</Button>

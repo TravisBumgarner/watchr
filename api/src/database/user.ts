@@ -22,6 +22,7 @@ const create = async ({ first_name, last_name, password, email }: NewUserType) =
 
 // TODO: what is this return type and also await wtf
 const findByEmail = async (email: string) => {
+    console.log('email'), email
     const dbResponse = await knex('users')
         .select('*')
         .where('email', email)

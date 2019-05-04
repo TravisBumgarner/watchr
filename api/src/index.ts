@@ -6,24 +6,42 @@ var sessions = require('client-sessions')
 const database = require('./database')
 
 const app = express()
-const ONE_DAY = 24 * 60 * 60 * 1000
+app.use(cors({ credentials: true, origin: 'http://127.0.0.1:3000' }))
+app.use(bodyParser.json())
 app.use(
     sessions({
         cookieName: 'session',
-        secret: 'CHANGasdasdasdasdEME',
-        duration: ONE_DAY
+        secret: 'somecrazykeythatyoushouldkeephidden',
+        duration: 60 * 60 * 1000,
+        activeDuration: 1000 * 60 * 5,
+        cookie: {
+            maxAge: 60000,
+            httpOnly: false,
+            secure: false,
+            domain: 'http://127.0.0.1:3000'
+        }
     })
 )
-app.use(cors())
-app.use(bodyParser.json())
 
-app.use((requst: any, response: any, next: any) => {
-    if (requst.session.seenyou) {
+app.use(function(request: any, response: any, next: any) {
+    if (request.session.seenyou) {
         response.setHeader('X-Seen-You', 'true')
     } else {
-        requst.session.seenyou = true
+        request.session.seenyou = true
         response.setHeader('X-Seen-You', 'false')
     }
+    next()
+})
+
+app.use((request: any, response: any, next: any) => {
+    const path = request.originalUrl
+    if (request.session.user) {
+        console.log('session')
+        console.log(request.session)
+    } else {
+        console.log('no session')
+    }
+    next()
 })
 
 app.get('/ok', function(request: any, response: any) {
@@ -38,20 +56,21 @@ app.post('/login', async (request: any, response: any) => {
     const user = await database.user.findByEmail(request.body.email)
     if (user) {
         if (request.body.password === user.password) {
-            request.session.user = user // 14:49 in the video, still don't quite understand this line. This name needs to be the same as in the middleware
-
-            return response.send({
+            request.session.user = user
+            console.log(response.getHeaders())
+            console.log(request.session)
+            response.send({
                 success: true,
                 message: "You're in!"
             })
         } else {
-            return response.send({
+            response.send({
                 success: false,
                 message: 'That email or password is incorrect or that user does not exist.'
             })
         }
     } else {
-        return response.send({
+        response.send({
             success: false,
             message: 'That email or password is incorrect or that user does not exist.'
         })
