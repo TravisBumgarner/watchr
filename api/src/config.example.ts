@@ -1,1 +1,2 @@
-export default { tmdbKey: '' }
+export default { tmdbKey: '', sessionSecretKey: '' }
+x
