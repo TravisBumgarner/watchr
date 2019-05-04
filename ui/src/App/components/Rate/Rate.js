@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { Component } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
 
@@ -18,70 +18,84 @@ const UpVoteButton = styled.button`
     top: 50vh;
 `
 
-const queue = new Queue()
+class Rate extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            isLoading: true,
+            downVotes: [],
+            upVotes: [],
+            nextItem: { original_title: 'initialload' },
+            areResults: false
+        }
+        this.queue = new Queue()
+    }
 
-const Rate = () => {
-    const [isLoading, setIsLoading] = useState(true)
-    const [downVotes, setDownVotes] = useState([])
-    const [upVotes, setUpVotes] = useState([])
-    const [nextItem, setNextItem] = useState({ original_title: 'initialload' })
+    componentDidMount() {
+        this.getMovieIds()
+        this.setupEventListeners()
+    }
 
-    const getMovieIds = () => {
+    getMovieIds = () => {
         axios
             .get(`${__API__}/movies`)
             .then(response => {
-                queue.addArray(response.data.data)
-                setIsLoading(false)
+                this.setState({ isLoading: false, areResults: true })
+                this.queue.addArray(response.data.data)
             })
             .catch(error => {
                 console.log(error)
-                setIsLoading(false)
+                this.setState({ isLoading: false })
             })
     }
-    useEffect(getMovieIds, [])
 
-    const getNextItem = () => {
-        console.log('i happen', isLoading)
-        if (isLoading) {
-            return
+    getNextItem = () => {
+        console.log(this.queue.size(), 'queue')
+        if (this.queue.size() > 0) {
+            this.setState({ nextItem: this.queue.last() })
+            this.queue.remove()
+        } else {
+            this.setState({ areResults: false })
         }
-        console.log('then I do')
-        const item = queue.first()
-        queue.remove()
-        console.log(item)
-        console.log('getNextItem', item)
-        setNextItem(item)
     }
-    // useEffect(getNextItem, [isLoading]) // Fetch initial Item when content is loaded
 
-    const handleKeyDown = event => {
+    handleKeyDown = event => {
         const LEFT_ARROW = '37'
         const RIGHT_ARROW = '39'
         if (event.keyCode == LEFT_ARROW) {
             console.log('downvote')
         } else if (event.keyCode == RIGHT_ARROW) {
             console.log('upvote')
-            getNextItem()
+            this.getNextItem()
         }
     }
 
-    const setupEventListeners = () => {
-        window.addEventListener('keydown', handleKeyDown)
+    setupEventListeners = () => {
+        window.addEventListener('keydown', this.handleKeyDown)
 
-        return () => window.removeEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', this.handleKeyDown)
     }
-    useEffect(setupEventListeners, [])
 
-    console.log('loading?', isLoading)
-    return isLoading ? (
-        <div>Loading</div>
-    ) : (
-        <div>
-            <DownVoteButton onClick={() => console.log('boo')}>Down</DownVoteButton>
-            <UpVoteButton onClick={() => console.log('yay')}>Up</UpVoteButton>
-            <Card>{nextItem.original_title}</Card>
-        </div>
-    )
+    render() {
+        const { isLoading, nextItem, areResults } = this.state
+        let content
+
+        if (isLoading) {
+            content = <div>Loading</div>
+        } else if (!areResults) {
+            content = <div>No results</div>
+        } else {
+            content = (
+                <div>
+                    <DownVoteButton onClick={() => console.log('boo')}>Down</DownVoteButton>
+                    <UpVoteButton onClick={() => console.log('yay')}>Up</UpVoteButton>
+                    <Card>{nextItem.original_title}</Card>
+                </div>
+            )
+        }
+
+        return content
+    }
 }
 
 export default Rate
