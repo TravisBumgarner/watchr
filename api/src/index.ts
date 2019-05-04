@@ -50,7 +50,6 @@ app.post("/login", async (request: any, response: any) => {
   const user = await database.user.findByEmail(request.body.email);
   if (user) {
     if (request.body.password === user.password) {
-      console.log(config);
       const token = jwt.sign(
         { email: user.email, first_name: user.first_name },
         config.tokenKey
@@ -116,7 +115,14 @@ app.post("/register", (request: any, response: any) => {
         "A user with that email address already exists. Please login instead."
     });
   } else {
-    database.user.create(request.body).then(() => {
+    database.user.create(request.body).then((response: any) => {
+      console.log("hi");
+      console.log(response);
+      // const token = jwt.sign(
+      //   { email: user.email, first_name: user.first_name },
+      //   config.tokenKey
+      // );
+
       return response.send({
         success: true,
         message: "User registration successful!"

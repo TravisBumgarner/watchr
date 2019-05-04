@@ -8,18 +8,20 @@ const App = () => {
     const [user, setUser] = useState(null)
     const [login, toggleLogin] = useState(false)
     const loadUserFromToken = () => {
-        let token = sessionStorage.getItem('jwtToken')
-
-        if (!token || token === '') {
+        const token = sessionStorage.getItem('jwtToken')
+        console.log('token', token)
+        if (!token || token === '' || typeof token === 'undefined') {
+            console.log('i return')
             return
+        } else {
+            axios
+                .post(`${__API__}/validate_token`, { token })
+                .then(response => {
+                    setUser(response.data.user)
+                    toggleLogin(true)
+                })
+                .catch(error => console.log(error))
         }
-        axios
-            .post(`${__API__}/validate_token`, { token })
-            .then(response => {
-                setUser(response.data.user)
-                toggleLogin(true)
-            })
-            .catch(error => console.log(error))
     }
     useEffect(loadUserFromToken, [login])
 
