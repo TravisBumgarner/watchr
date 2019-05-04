@@ -81,6 +81,12 @@ app.post('/login', async (request: any, response: any) => {
     }
 })
 
+app.post('/like', async (request: any, response: any) => {
+    const record = await database.like.create({ ...request.body })
+    console.log(record)
+    response.send('recorded')
+})
+
 app.post('/register', (request: any, response: any) => {
     const user = database.user.findByEmail(request.body.email)
     if (user) {

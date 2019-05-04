@@ -25,7 +25,7 @@ class Rate extends Component {
             isLoading: true,
             downVotes: [],
             upVotes: [],
-            nextItem: { original_title: 'initialload' },
+            currentItem: undefined,
             areResults: false
         }
         this.queue = new Queue()
@@ -42,6 +42,7 @@ class Rate extends Component {
             .then(response => {
                 this.setState({ isLoading: false, areResults: true })
                 this.queue.addArray(response.data.data)
+                this.getNextItem()
             })
             .catch(error => {
                 console.log(error)
@@ -52,21 +53,39 @@ class Rate extends Component {
     getNextItem = () => {
         console.log(this.queue.size(), 'queue')
         if (this.queue.size() > 0) {
-            this.setState({ nextItem: this.queue.last() })
+            this.setState({ currentItem: this.queue.last() })
             this.queue.remove()
         } else {
             this.setState({ areResults: false })
         }
     }
 
+    recordLiked = wasLiked => {
+        const { currentItem } = this.state
+        axios
+            .post(`${__API__}/like`, {
+                user_id: 'd0ebea98-fff1-4811-acfb-7255f3a3f473',
+                movie_id: currentItem.id,
+                liked: wasLiked ? 1 : 0
+            })
+            .then(response => {})
+            .catch(error => {
+                console.log(error)
+                this.setState({ isLoading: false })
+            })
+        console.log()
+
+        this.getNextItem()
+    }
+
     handleKeyDown = event => {
         const LEFT_ARROW = '37'
         const RIGHT_ARROW = '39'
         if (event.keyCode == LEFT_ARROW) {
-            console.log('downvote')
+            this.recordLiked(true)
         } else if (event.keyCode == RIGHT_ARROW) {
             console.log('upvote')
-            this.getNextItem()
+            this.recordLiked(false)
         }
     }
 
@@ -77,19 +96,19 @@ class Rate extends Component {
     }
 
     render() {
-        const { isLoading, nextItem, areResults } = this.state
+        const { isLoading, currentItem, areResults } = this.state
         let content
 
-        if (isLoading) {
+        if (isLoading || !currentItem) {
             content = <div>Loading</div>
         } else if (!areResults) {
             content = <div>No results</div>
         } else {
             content = (
                 <div>
-                    <DownVoteButton onClick={() => console.log('boo')}>Down</DownVoteButton>
-                    <UpVoteButton onClick={() => console.log('yay')}>Up</UpVoteButton>
-                    <Card>{nextItem.original_title}</Card>
+                    <DownVoteButton onClick={() => this.recordLiked(false)}>Down</DownVoteButton>
+                    <UpVoteButton onClick={() => this.recordLiked(true)}>Up</UpVoteButton>
+                    <Card>{currentItem.original_title}</Card>
                 </div>
             )
         }
