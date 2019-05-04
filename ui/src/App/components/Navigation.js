@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 const links = [
     { title: 'Home', route: '/' },
+    { title: 'Rate', route: '/rate' },
     { title: 'Login', route: '/login' },
     { title: 'Register', route: '/register' }
 ]

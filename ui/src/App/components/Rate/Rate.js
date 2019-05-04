@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
+import { Card } from './components'
+
 const contentQueue = ['red', 'blue', 'yellow', 'green']
 
 const DownVoteButton = styled.button`
@@ -13,12 +15,6 @@ const UpVoteButton = styled.button`
     position: fixed;
     right: 5px;
     top: 50vh;
-`
-
-const Card = styled.div`
-    width: 100vw;
-    height: 100vh;
-    background-color: ${props => props.color};
 `
 
 const Rate = () => {
@@ -67,11 +63,10 @@ const Rate = () => {
 
     const handleUpVote = () => {
         const modifiedUpVotes = [...upVotes, currentItem]
-        console.log(upVotes, currentItem)
         setUpVotes(modifiedUpVotes)
         getNextItem()
     }
-
+    console.log('hi')
     return (
         <div>
             <DownVoteButton onClick={handleDownVote}>Down</DownVoteButton>
