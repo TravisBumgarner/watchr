@@ -1,9 +1,14 @@
 import * as React from 'react'
 import axios from 'axios'
+import { Redirect } from 'react-router-dom'
 
 import { Button, Input } from 'SharedComponents'
 
-const Register = ({ toggleLogin }) => {
+const Register = ({ isAuthenticated, setIsAuthenticated }) => {
+    if (isAuthenticated) {
+        return <Redirect to="/" />
+    }
+
     const [firstName, setFirstName] = React.useState('f')
     const [lastName, setLastName] = React.useState('f')
     const [email, setEmail] = React.useState('f@f.com')
@@ -18,12 +23,16 @@ const Register = ({ toggleLogin }) => {
                 last_name: lastName
             })
             .then(response => {
-                sessionStorage.setItem('jwtToken', response.data.token)
-                toggleLogin(true)
-                setEmail('')
-                setPassword('')
-                setFirstName('')
-                setLastName('')
+                if (response.data.success) {
+                    sessionStorage.setItem('jwtToken', response.data.token)
+                    setIsAuthenticated(true)
+                    setEmail('')
+                    setPassword('')
+                    setFirstName('')
+                    setLastName('')
+                } else {
+                    console.log('Registration failed.')
+                }
             })
             .catch(error => {
                 console.log(error)

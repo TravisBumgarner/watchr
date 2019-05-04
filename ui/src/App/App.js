@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 
 import { Home, Rate, Login, Navigation, Register } from './components'
 
+const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
+    <Route
+        {...rest}
+        render={props => (isAuthenticated === true ? <Component {...props} /> : <Redirect to="/login" />)}
+    />
+)
+
 const App = () => {
     const [user, setUser] = useState(null)
-    const [login, toggleLogin] = useState(false)
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
     const loadUserFromToken = () => {
         const token = sessionStorage.getItem('jwtToken')
         if (!token || token === '') {
@@ -15,13 +22,18 @@ const App = () => {
             axios
                 .post(`${__API__}/validate_token`, { token })
                 .then(response => {
-                    setUser(response.data.user)
-                    toggleLogin(true)
+                    if (response.data.success) {
+                        setUser(response.data.user)
+                        toggleLogin(true)
+                        setIsAuthenticated(true)
+                    } else {
+                        console.log('Validate Token failed.')
+                    }
                 })
                 .catch(error => console.log(error))
         }
     }
-    useEffect(loadUserFromToken, [login])
+    useEffect(loadUserFromToken, [isAuthenticated])
 
     return (
         <>
@@ -29,9 +41,17 @@ const App = () => {
             <div>{user ? `Welcome, ${user.first_name}` : 'Welcome!'}</div>
             <Switch>
                 <Route exact path="/" component={Home} />
-                <Route exact path="/rate" component={Rate} />
-                <Route exact path="/login" render={rest => <Login toggleLogin={toggleLogin} {...rest} />} />
-                <Route exact path="/register" render={rest => <Register toggleLogin={toggleLogin} {...rest} />} />
+                <PrivateRoute exact path="/rate" component={Rate} />
+                <Route
+                    exact
+                    path="/login"
+                    render={rest => <Login isAuthenticated setIsAuthenticated={setIsAuthenticated} {...rest} />}
+                />
+                <Route
+                    exact
+                    path="/register"
+                    render={rest => <Register isAuthenticated setIsAuthenticated={setIsAuthenticated} {...rest} />}
+                />
                 <Route component={() => <div>Not found</div>} />
             </Switch>
         </>

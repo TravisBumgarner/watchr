@@ -1,9 +1,14 @@
 import * as React from 'react'
 import axios from 'axios'
+import { Redirect } from 'react-router-dom'
 
 import { Button, Input } from 'SharedComponents'
 
-const Login = ({ toggleLogin }) => {
+const Login = ({ isAuthenticated, setIsAuthenticated }) => {
+    if (isAuthenticated) {
+        return <Redirect to="/" />
+    }
+
     const [email, setEmail] = React.useState('travis-bumgarner@pluralsight.com')
     const [password, setPassword] = React.useState('hello123')
 
@@ -14,10 +19,14 @@ const Login = ({ toggleLogin }) => {
                 email
             })
             .then(response => {
-                sessionStorage.setItem('jwtToken', response.data.token)
-                toggleLogin(true)
-                setEmail('')
-                setPassword('')
+                if (response.data.success) {
+                    sessionStorage.setItem('jwtToken', response.data.token)
+                    setIsAuthenticated(true)
+                    setEmail('')
+                    setPassword('')
+                } else {
+                    console.log('something went wrong with login')
+                }
             })
             .catch(error => {
                 console.log(error)
