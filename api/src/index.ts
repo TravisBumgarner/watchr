@@ -59,9 +59,9 @@ app.post('/login', async (request: any, response: any) => {
             request.session.user = user
             console.log(response.getHeaders())
             console.log(request.session)
-            response.send({
+            response.status(200).send({
                 success: true,
-                message: "You're in!"
+                user // Send user
             })
         } else {
             response.send({
