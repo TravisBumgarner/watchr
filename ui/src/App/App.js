@@ -5,7 +5,8 @@ import { Switch, Route } from 'react-router-dom'
 import { Home, Rate, Login, Navigation, Register } from './components'
 
 const App = () => {
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState(null)
+    const [login, toggleLogin] = useState(false)
     const loadUserFromToken = () => {
         let token = sessionStorage.getItem('jwtToken')
 
@@ -14,10 +15,13 @@ const App = () => {
         }
         axios
             .post(`${__API__}/validate_token`, { token })
-            .then(response => setUser(response.data.user))
+            .then(response => {
+                setUser(response.data.user)
+                toggleLogin(true)
+            })
             .catch(error => console.log(error))
     }
-    useEffect(loadUserFromToken, [])
+    useEffect(loadUserFromToken, [login])
 
     return (
         <>
@@ -26,8 +30,8 @@ const App = () => {
             <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/rate" component={Rate} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/register" component={Register} />
+                <Route exact path="/login" render={rest => <Login toggleLogin={toggleLogin} {...rest} />} />
+                <Route exact path="/register" render={rest => <Register toggleLogin={toggleLogin} {...rest} />} />
                 <Route component={() => <div>Not found</div>} />
             </Switch>
         </>

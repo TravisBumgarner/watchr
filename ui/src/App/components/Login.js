@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import { Button, Input } from 'SharedComponents'
 
-const Login = () => {
+const Login = ({ toggleLogin }) => {
     const [email, setEmail] = React.useState('travis-bumgarner@pluralsight.com')
     const [password, setPassword] = React.useState('hello123')
 
@@ -15,6 +15,7 @@ const Login = () => {
             })
             .then(response => {
                 sessionStorage.setItem('jwtToken', response.data.token)
+                toggleLogin(true)
                 setEmail('')
                 setPassword('')
             })
