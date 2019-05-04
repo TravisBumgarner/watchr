@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Switch, Route, Redirect } from 'react-router-dom'
 
-import { Home, Rate, Login, Navigation, Register } from './components'
+import { Home, Rate, Login, Logout, Navigation, Register } from './components'
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
     <Route
         {...rest}
-        render={props => (isAuthenticated === true ? <Component {...props} /> : <Redirect to="/login" />)}
+        render={props => (isAuthenticated === true ? <Component {...rest} /> : <Redirect to="/login" />)}
     />
 )
 
@@ -24,7 +24,6 @@ const App = () => {
                 .then(response => {
                     if (response.data.success) {
                         setUser(response.data.user)
-                        toggleLogin(true)
                         setIsAuthenticated(true)
                     } else {
                         console.log('Validate Token failed.')
@@ -37,20 +36,32 @@ const App = () => {
 
     return (
         <>
-            <Navigation />
+            <Navigation isAuthenticated={isAuthenticated} />
             <div>{user ? `Welcome, ${user.first_name}` : 'Welcome!'}</div>
             <Switch>
                 <Route exact path="/" component={Home} />
-                <PrivateRoute exact path="/rate" component={Rate} />
+                <PrivateRoute isAuthenticated={isAuthenticated} exact user={user} path="/rate" component={Rate} />
                 <Route
                     exact
                     path="/login"
-                    render={rest => <Login isAuthenticated setIsAuthenticated={setIsAuthenticated} {...rest} />}
+                    render={rest => (
+                        <Login isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} {...rest} />
+                    )}
                 />
                 <Route
                     exact
                     path="/register"
-                    render={rest => <Register isAuthenticated setIsAuthenticated={setIsAuthenticated} {...rest} />}
+                    render={rest => (
+                        <Register isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} {...rest} />
+                    )}
+                />
+                <PrivateRoute
+                    isAuthenticated={isAuthenticated}
+                    exact
+                    path="/logout"
+                    render={rest => (
+                        <Logout isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} {...rest} />
+                    )}
                 />
                 <Route component={() => <div>Not found</div>} />
             </Switch>

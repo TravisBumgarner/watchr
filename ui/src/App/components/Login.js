@@ -5,12 +5,14 @@ import { Redirect } from 'react-router-dom'
 import { Button, Input } from 'SharedComponents'
 
 const Login = ({ isAuthenticated, setIsAuthenticated }) => {
+    console.log(isAuthenticated)
     if (isAuthenticated) {
+        console.log('login redirect')
         return <Redirect to="/" />
     }
 
-    const [email, setEmail] = React.useState('travis-bumgarner@pluralsight.com')
-    const [password, setPassword] = React.useState('hello123')
+    const [email, setEmail] = React.useState('')
+    const [password, setPassword] = React.useState('')
 
     const handleSubmit = () => {
         axios

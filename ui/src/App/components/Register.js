@@ -9,10 +9,10 @@ const Register = ({ isAuthenticated, setIsAuthenticated }) => {
         return <Redirect to="/" />
     }
 
-    const [firstName, setFirstName] = React.useState('f')
-    const [lastName, setLastName] = React.useState('f')
-    const [email, setEmail] = React.useState('f@f.com')
-    const [password, setPassword] = React.useState('f')
+    const [firstName, setFirstName] = React.useState('')
+    const [lastName, setLastName] = React.useState('')
+    const [email, setEmail] = React.useState('')
+    const [password, setPassword] = React.useState('')
 
     const handleSubmit = () => {
         axios
@@ -42,11 +42,11 @@ const Register = ({ isAuthenticated, setIsAuthenticated }) => {
     return (
         <div>
             First Name:
-            <Input onChange={setFirstName} value={firstName} />
+            <Input type="text" onChange={setFirstName} value={firstName} />
             Last Name:
-            <Input onChange={setLastName} value={lastName} />
+            <Input type="text" onChange={setLastName} value={lastName} />
             Email:
-            <Input onChange={setEmail} value={email} />
+            <Input type="email" onChange={setEmail} value={email} />
             Password:
             <Input type="password" onChange={setPassword} value={password} />
             <Button onClick={handleSubmit}>Register</Button>

@@ -8,7 +8,7 @@ Queue.prototype.add = function(record) {
 }
 
 Queue.prototype.addArray = function(records) {
-    records.forEach(record => this.add(record))
+    records && records.length && records.forEach(record => this.add(record))
 }
 
 Queue.prototype.remove = function() {

@@ -51,7 +51,7 @@ app.post("/login", async (request: any, response: any) => {
   if (user) {
     if (request.body.password === user.password) {
       const token = jwt.sign(
-        { email: user.email, first_name: user.first_name },
+        { email: user.email, first_name: user.first_name, id: user.id },
         config.tokenKey
       );
       response.send({
@@ -117,7 +117,11 @@ app.post("/register", async (request: any, response: any) => {
   } else {
     database.user.create(request.body).then((dbResponse: any) => {
       const token = jwt.sign(
-        { email: request.body.email, first_name: request.body.first_name },
+        {
+          id: request.body.id,
+          email: request.body.email,
+          first_name: request.body.first_name
+        },
         config.tokenKey
       );
 

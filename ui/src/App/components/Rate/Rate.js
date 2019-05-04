@@ -3,7 +3,6 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import { Card } from './components'
-import config from 'config'
 import { Queue } from 'utilities'
 
 const DownVoteButton = styled.button`
@@ -40,8 +39,9 @@ class Rate extends Component {
         axios
             .get(`${__API__}/movies`)
             .then(response => {
+                console.log('movies', response.data.movies)
                 this.setState({ isLoading: false, areResults: true })
-                this.queue.addArray(response.data.data)
+                this.queue.addArray(response.data.movies)
                 this.getNextItem()
             })
             .catch(error => {
@@ -62,9 +62,11 @@ class Rate extends Component {
 
     recordLiked = wasLiked => {
         const { currentItem } = this.state
+        const { user } = this.props
+
         axios
             .post(`${__API__}/like`, {
-                user_id: 'd0ebea98-fff1-4811-acfb-7255f3a3f473',
+                user_id: user.id,
                 movie_id: currentItem.id,
                 liked: wasLiked ? 1 : 0
             })
@@ -84,7 +86,6 @@ class Rate extends Component {
         if (event.keyCode == LEFT_ARROW) {
             this.recordLiked(true)
         } else if (event.keyCode == RIGHT_ARROW) {
-            console.log('upvote')
             this.recordLiked(false)
         }
     }
