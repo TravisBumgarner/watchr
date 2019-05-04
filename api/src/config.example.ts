@@ -1,1 +1,1 @@
-export default { tmdbKey: '', sessionSecretKey: '' }
+export default { tmdbKey: '', tokenKey: 'changeMe' }

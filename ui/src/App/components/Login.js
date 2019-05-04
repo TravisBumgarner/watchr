@@ -9,15 +9,12 @@ const Login = () => {
 
     const handleSubmit = () => {
         axios
-            .post(
-                `${__API__}/login`,
-                {
-                    password,
-                    email
-                },
-                { withCredentials: true }
-            )
-            .then(() => {
+            .post(`${__API__}/login`, {
+                password,
+                email
+            })
+            .then(response => {
+                sessionStorage.setItem('jwtToken', response.data.token)
                 setEmail('')
                 setPassword('')
             })

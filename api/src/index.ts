@@ -1,107 +1,128 @@
-const bodyParser = require('body-parser')
-const express = require('express')
-const cors = require('cors')
-var sessions = require('client-sessions')
+import { any } from "bluebird";
+import { user } from "./database";
 
-const database = require('./database')
+const bodyParser = require("body-parser");
+const express = require("express");
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
 
-const app = express()
-app.use(cors({ credentials: true }))
-app.use(bodyParser.json())
-// app.use(
-//     sessions({
-//         cookieName: 'session',
-//         secret: 'somecrazykeythatyoushouldkeephidden',
-//         duration: 60 * 60 * 1000,
-//         activeDuration: 1000 * 60 * 5,
-//         cookie: {
-//             maxAge: 60000,
-//             httpOnly: false,
-//             secure: false,
-//             domain: 'localhost:3000'
-//         }
-//     })
-// )
+const config = require("./config");
+const database = require("./database");
 
-// app.use(function(request: any, response: any, next: any) {
-//     if (request.session.seenyou) {
-//         response.setHeader('X-Seen-You', 'true')
-//     } else {
-//         request.session.seenyou = true
-//         response.setHeader('X-Seen-You', 'false')
-//     }
-//     next()
-// })
+const app = express();
 
-// app.use((request: any, response: any, next: any) => {
-//     const path = request.originalUrl
-//     if (request.session.user) {
-//         console.log('session')
-//         console.log(request.session)
-//     } else {
-//         console.log('no session')
-//     }
-//     next()
-// })
+app.use(cors());
+app.use(bodyParser.json());
 
-app.get('/ok', function(request: any, response: any) {
-    return response.send('ok')
-})
+app.use((request: any, response: any, next: any) => {
+  try {
+    const token = request.headers.authorization.split(" ")[1];
+    jwt.verify(token, config.tokenKey, (error: any, payload: any) => {
+      console.log(payload);
+      if (payload) {
+        user.findByEmail(payload.email).then(doc => {
+          request.user = doc;
+          next();
+        });
+      }
+    });
+  } catch (error) {
+    console.log("No token.");
+    next();
+  }
+});
 
-app.get('/', function(request: any, response: any) {
-    return response.send('home')
-})
+app.get("/ok", function(request: any, response: any) {
+  return response.send("ok");
+});
 
-app.get('/movies', (request: any, response: any) => {
-    database.movie.getList().then((movies: any) => response.send({ success: true, data: movies }))
-})
+app.get("/", function(request: any, response: any) {
+  return response.send("home");
+});
 
-app.post('/login', async (request: any, response: any) => {
-    const user = await database.user.findByEmail(request.body.email)
-    if (user) {
-        if (request.body.password === user.password) {
-            request.session.user = user
-            console.log(response.getHeaders())
-            console.log(request.session)
-            response.status(200).send({
-                success: true,
-                user // Send user
-            })
-        } else {
-            response.send({
-                success: false,
-                message: 'That email or password is incorrect or that user does not exist.'
-            })
-        }
+app.get("/movies", (request: any, response: any) => {
+  database.movie
+    .getList()
+    .then((movies: any) => response.send({ success: true, movies }));
+});
+
+app.post("/login", async (request: any, response: any) => {
+  const user = await database.user.findByEmail(request.body.email);
+  if (user) {
+    if (request.body.password === user.password) {
+      console.log(config);
+      const token = jwt.sign(
+        { email: user.email, first_name: user.first_name },
+        config.tokenKey
+      );
+      response.send({
+        success: true,
+        message: "Welcome!",
+        token
+      });
     } else {
-        response.send({
-            success: false,
-            message: 'That email or password is incorrect or that user does not exist.'
-        })
+      response.send({
+        success: false,
+        message:
+          "That email or password is incorrect or that user does not exist."
+      });
     }
-})
+  } else {
+    response.send({
+      success: false,
+      message:
+        "That email or password is incorrect or that user does not exist."
+    });
+  }
+});
 
-app.post('/like', async (request: any, response: any) => {
-    const record = await database.like.create({ ...request.body })
-    console.log(record)
-    response.send('recorded')
-})
+app.post("/validate_token", async (request: any, response: any) => {
+  const token = request.body.token;
 
-app.post('/register', (request: any, response: any) => {
-    const user = database.user.findByEmail(request.body.email)
-    if (user) {
-        return response.send({
-            success: false,
-            message: 'A user with that email address already exists. Please login instead.'
-        })
-    } else {
-        database.user.create(request.body).then(() => {
-            return response.send({
-                success: true,
-                message: 'User registration successful!'
-            })
-        })
+  if (!token) {
+    return response
+      .status(401)
+      .send({ success: false, message: "Must pass token" });
+  }
+
+  jwt.verify(token, config.tokenKey, (error: any, user: any) => {
+    if (error) {
+      console.log(error);
+      return response
+        .status(500)
+        .send({ success: false, message: "Something went wrong" });
     }
-})
 
-export default app
+    return response.status(200).send({
+      success: true,
+      user,
+      token
+    });
+  });
+});
+
+app.post("/like", async (request: any, response: any) => {
+  const record = await database.like.create({ ...request.body });
+  console.log(record);
+  response.send("recorded");
+});
+
+app.post("/register", (request: any, response: any) => {
+  const user = database.user.findByEmail(request.body.email);
+  if (user) {
+    return response.send({
+      success: false,
+      message:
+        "A user with that email address already exists. Please login instead."
+    });
+  } else {
+    database.user.create(request.body).then(() => {
+      return response.send({
+        success: true,
+        message: "User registration successful!"
+      });
+    });
+  }
+});
+
+export default app;
