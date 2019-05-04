@@ -9,30 +9,28 @@ const app = express()
 const ONE_DAY = 24 * 60 * 60 * 1000
 app.use(
     sessions({
-        cookieName: 'authentiasdasdcated',
-        secret: 'CHANGasdasdasdasdEME', // TODO: How long should a secret be?
-        duration: ONE_DAY,
-        activeDuration: ONE_DAY // TODO: Better values here?
+        cookieName: 'session',
+        secret: 'CHANGasdasdasdasdEME',
+        duration: ONE_DAY
     })
 )
 app.use(cors())
 app.use(bodyParser.json())
 
-// app.use((requst: any, response: any, next: any) => {
-//     if (requst.session.seenyou) {
-//         response.setHeader('X-Seen-You', 'true')
-//     } else {
-//         requst.session.seenyou = true
-//         response.setHeader('X-Seen-You', 'false')
-//     }
-// })
+app.use((requst: any, response: any, next: any) => {
+    if (requst.session.seenyou) {
+        response.setHeader('X-Seen-You', 'true')
+    } else {
+        requst.session.seenyou = true
+        response.setHeader('X-Seen-You', 'false')
+    }
+})
 
 app.get('/ok', function(request: any, response: any) {
     return response.send('ok')
 })
 
 app.get('/', function(request: any, response: any) {
-    console.log(request.session)
     return response.send('home')
 })
 
@@ -40,8 +38,8 @@ app.post('/login', async (request: any, response: any) => {
     const user = await database.user.findByEmail(request.body.email)
     if (user) {
         if (request.body.password === user.password) {
-            console.log(response)
-            request.session.user = 'user' // 14:49 in the video, still don't quite understand this line,
+            request.session.user = user // 14:49 in the video, still don't quite understand this line. This name needs to be the same as in the middleware
+
             return response.send({
                 success: true,
                 message: "You're in!"
