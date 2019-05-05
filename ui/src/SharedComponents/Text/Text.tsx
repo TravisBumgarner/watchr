@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import styled from 'styled-components'
 
 const Text = styled(({ size = 'medium', children, className }) => {

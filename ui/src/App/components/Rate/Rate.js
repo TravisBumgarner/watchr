@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
 
-import { MovieCard } from './components'
-import { Queue } from 'utilities'
+import { MovieCard } from './components/index'
+import { Queue } from 'Utilities'
 
 const CardWrapper = styled.div`
     display: flex;
@@ -22,8 +22,8 @@ const UpVoteButton = styled.button`
     right: 5px;
     top: 50vh;
 `
-
-class Rate extends Component {
+// Next line Figure out next line
+class Rate extends Component<any, any> {
     constructor(props) {
         super(props)
         this.state = {
@@ -33,7 +33,7 @@ class Rate extends Component {
             currentItem: undefined,
             areResults: false
         }
-        this.queue = new Queue()
+        this.queue = new Queue() //TODO: What to do with this line
     }
 
     componentDidMount() {

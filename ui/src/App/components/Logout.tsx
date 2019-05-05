@@ -1,8 +1,7 @@
 import * as React from 'react'
-import axios from 'axios'
 import { Redirect } from 'react-router-dom'
 
-import { Button, Input } from 'SharedComponents'
+import { Button } from 'SharedComponents'
 
 const Logout = ({ isAuthenticated, setIsAuthenticated }) => {
     if (!isAuthenticated) {
@@ -10,7 +9,7 @@ const Logout = ({ isAuthenticated, setIsAuthenticated }) => {
     }
 
     const handleLogout = () => {
-        sessionStorage.setItem('jwtToken', response.data.token)
+        sessionStorage.setItem('jwtToken', '')
     }
 
     return (

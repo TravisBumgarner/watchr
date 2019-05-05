@@ -1,8 +1,8 @@
-import React from 'react'
+import * as React from 'react'
 import ReactPlayer from 'react-player'
 
 const Video = ({ site, videoKey }) => {
-    let url = null
+    let url: string
 
     switch (site) {
         case 'YouTube':
@@ -14,7 +14,7 @@ const Video = ({ site, videoKey }) => {
         default:
             url = ''
     }
-    console.log(url)
+
     if (!url.length) {
         return null
     }

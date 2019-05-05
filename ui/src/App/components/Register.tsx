@@ -4,21 +4,23 @@ import { Redirect } from 'react-router-dom'
 
 import { Button, Input } from 'SharedComponents'
 
-const Login = ({ isAuthenticated, setIsAuthenticated }) => {
-    console.log(isAuthenticated)
+const Register = ({ isAuthenticated, setIsAuthenticated }) => {
     if (isAuthenticated) {
-        console.log('login redirect')
         return <Redirect to="/" />
     }
 
-    const [email, setEmail] = React.useState('')
-    const [password, setPassword] = React.useState('')
+    const [firstName, setFirstName] = React.useState<any>('') //TODO: Fix this.
+    const [lastName, setLastName] = React.useState<any>('') //TODO: Fix this.
+    const [email, setEmail] = React.useState<any>('') //TODO: Fix this.
+    const [password, setPassword] = React.useState<any>('') //TODO: Fix this.
 
     const handleSubmit = () => {
         axios
-            .post(`${__API__}/login`, {
+            .post(`${__API__}/register`, {
                 password,
-                email
+                email,
+                first_name: firstName,
+                last_name: lastName
             })
             .then(response => {
                 if (response.data.success) {
@@ -26,8 +28,10 @@ const Login = ({ isAuthenticated, setIsAuthenticated }) => {
                     setIsAuthenticated(true)
                     setEmail('')
                     setPassword('')
+                    setFirstName('')
+                    setLastName('')
                 } else {
-                    console.log('something went wrong with login')
+                    console.log('Registration failed.')
                 }
             })
             .catch(error => {
@@ -37,13 +41,17 @@ const Login = ({ isAuthenticated, setIsAuthenticated }) => {
 
     return (
         <div>
+            First Name:
+            <Input type="text" onChange={setFirstName} value={firstName} />
+            Last Name:
+            <Input type="text" onChange={setLastName} value={lastName} />
             Email:
             <Input type="email" onChange={setEmail} value={email} />
             Password:
             <Input type="password" onChange={setPassword} value={password} />
-            <Button onClick={handleSubmit}>Login</Button>
+            <Button onClick={handleSubmit}>Register</Button>
         </div>
     )
 }
 
-export default Login
+export default Register

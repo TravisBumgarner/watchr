@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 
 import { Input, Button } from 'SharedComponents'
 
 const Friends = ({ user }) => {
-    const [friend, setFriend] = useState('')
+    const [friend, setFriend] = useState<any>('') //TODO: fix this
 
     const getFriendsDetails = () => {
         axios

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import * as React from 'react'
 import axios from 'axios'
 import { Switch, Route, Redirect } from 'react-router-dom'
 
-import { Home, Rate, Login, Logout, Navigation, Register, Friends } from './components'
+import { Login, Logout, Navigation, Register, Friends } from './components/index'
 
-const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
+const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }: any) => (
     <Route
         {...rest}
         render={props => (isAuthenticated === true ? <Component {...rest} /> : <Redirect to="/login" />)}
@@ -12,9 +12,9 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
 )
 
 const App = () => {
-    const [user, setUser] = useState(null)
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
-    const [isLoading, setIsLoading] = useState(true)
+    const [user, setUser] = React.useState<any>(null) //TODO: Fix these
+    const [isAuthenticated, setIsAuthenticated] = React.useState<any>(false) //TODO: Fix these
+    const [isLoading, setIsLoading] = React.useState<any>(true) //TODO: Fix these
 
     const loadUserFromToken = () => {
         const token = sessionStorage.getItem('jwtToken')
@@ -37,23 +37,22 @@ const App = () => {
                 .finally(() => setIsLoading(false))
         }
     }
-    useEffect(loadUserFromToken, [isAuthenticated])
+    React.useEffect(loadUserFromToken, [isAuthenticated])
 
     return (
         <>
             <Navigation isAuthenticated={isAuthenticated} />
-            <div>{user ? `Welcome, ${user.first_name}` : 'Welcome!'}</div>
+            <div>{user ? `Welcome, User` : 'Welcome!'}</div>
             {isLoading ? (
                 <div>Loading.......</div>
             ) : (
                 <Switch>
-                    <Route exact path="/" component={Home} />
-                    <PrivateRoute isAuthenticated={isAuthenticated} exact user={user} path="/rate" component={Rate} />
+                    {/* <Route exact path="/" render={rest => <Home {...rest} />} /> */}
+                    {/* <PrivateRoute isAuthenticated={isAuthenticated} exact user={user} path="/rate" component={Rate} /> */}
                     <PrivateRoute
                         user={user}
                         isAuthenticated={isAuthenticated}
                         exact
-                        user={user}
                         path="/friends"
                         component={Friends}
                     />
@@ -83,7 +82,7 @@ const App = () => {
                         isAuthenticated={isAuthenticated}
                         exact
                         path="/logout"
-                        render={rest => (
+                        render={(rest: any) => (
                             <Logout
                                 isAuthenticated={isAuthenticated}
                                 setIsAuthenticated={setIsAuthenticated}

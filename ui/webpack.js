@@ -17,15 +17,12 @@ setupEnv()
 
 module.exports = {
     entry: {
-        app: './src/index.js'
+        app: './src/index.tsx'
     },
     module: {
         rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: 'babel-loader'
-            }
+            { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
+            { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' }
         ]
     },
     output: {
@@ -39,10 +36,11 @@ module.exports = {
         historyApiFallback: true
     },
     resolve: {
+        extensions: ['.ts', '.tsx', '.js', '.json'],
         alias: {
             SharedComponents: path.resolve(__dirname, 'src/SharedComponents/'),
-            config: path.resolve(__dirname, 'config.js'),
-            utilities: path.resolve(__dirname, 'src/utilities')
+            Config: path.resolve(__dirname, 'src/config.ts'),
+            Utilities: path.resolve(__dirname, 'src/utilities')
         }
     },
     devtool: '',

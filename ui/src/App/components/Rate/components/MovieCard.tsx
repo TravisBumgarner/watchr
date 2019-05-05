@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import * as React from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
 
 import { Video } from 'SharedComponents'
-import config from 'config'
+import config from 'Config' //TODO: Get this to work with resolve.
 
 // Sample Card
 // adult: false
@@ -33,8 +33,8 @@ import config from 'config'
 // vote_count: 6295
 
 const MovieCard = styled(({ className, id }) => {
-    const [movieDetails, setMovieDetails] = useState(null)
-    const [video, setVideo] = useState(null)
+    const [movieDetails, setMovieDetails] = React.useState<any>(null) //TODO: Fix these
+    const [video, setVideo] = React.useState<any>(null) //TODO: Fix these
 
     const getMovieDetails = () => {
         axios
@@ -42,7 +42,7 @@ const MovieCard = styled(({ className, id }) => {
             .then(response => setMovieDetails(response.data))
             .catch(error => console.log(error))
     }
-    useEffect(getMovieDetails, [id])
+    React.useEffect(getMovieDetails, [id])
 
     const getVideos = () => {
         setVideo(null)
@@ -56,7 +56,7 @@ const MovieCard = styled(({ className, id }) => {
             })
             .catch(error => console.log(error))
     }
-    useEffect(getVideos, [id])
+    React.useEffect(getVideos, [id])
     return movieDetails ? (
         <div className={className}>
             <h2>{movieDetails.title}</h2>
