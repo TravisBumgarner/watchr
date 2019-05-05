@@ -19,6 +19,7 @@ const App = () => {
     const loadUserFromToken = () => {
         const token = sessionStorage.getItem('jwtToken')
         if (!token || token === '') {
+            setIsLoading(false)
             return
         } else {
             axios
@@ -27,6 +28,7 @@ const App = () => {
                     if (response.data.success) {
                         setUser(response.data.user)
                         setIsAuthenticated(true)
+                        console.log('Validate success')
                     } else {
                         console.log('Validate Token failed.')
                     }
@@ -42,7 +44,7 @@ const App = () => {
             <Navigation isAuthenticated={isAuthenticated} />
             <div>{user ? `Welcome, ${user.first_name}` : 'Welcome!'}</div>
             {isLoading ? (
-                <div>Loading...</div>
+                <div>Loading.......</div>
             ) : (
                 <Switch>
                     <Route exact path="/" component={Home} />

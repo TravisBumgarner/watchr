@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
 
+import { Video } from 'SharedComponents'
 import config from 'config'
 
 // Sample Card
@@ -33,18 +34,34 @@ import config from 'config'
 
 const MovieCard = styled(({ className, id }) => {
     const [movieDetails, setMovieDetails] = useState(null)
+    const [video, setVideo] = useState(null)
+
     const getMovieDetails = () => {
         axios
             .get(`${config.tmdbUrl}/movie/${id}?api_key=${config.tmdbKey}`)
-            .then(response => console.log(setMovieDetails(response.data)))
+            .then(response => setMovieDetails(response.data))
             .catch(error => console.log(error))
     }
     useEffect(getMovieDetails, [id])
 
+    const getVideos = () => {
+        setVideo(null)
+        axios
+            .get(`${config.tmdbUrl}/movie/${id}/videos?api_key=${config.tmdbKey}`)
+            .then(response => {
+                const trailers = response.data.results
+                    .filter(result => result.type.toLowerCase() === 'trailer')
+                    .filter(result => result.site.toLowerCase() === 'youtube')
+                trailers.length && setVideo(trailers[0])
+            })
+            .catch(error => console.log(error))
+    }
+    useEffect(getVideos, [id])
     return movieDetails ? (
         <div className={className}>
             <h2>{movieDetails.title}</h2>
             <h2>{movieDetails.overview}</h2>
+            {video ? <Video videoKey={video.key} site={video.site} /> : null}
             <img src={`http://image.tmdb.org/t/p/w300///${movieDetails.poster_path}`} />
         </div>
     ) : null
