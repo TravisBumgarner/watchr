@@ -46,6 +46,37 @@ app.get("/movies", (request: any, response: any) => {
     .then((movies: any) => response.send({ success: true, movies }));
 });
 
+const intersection = (setA, setB) => {
+  var _intersection = new Set();
+  for (var elem of setB) {
+      if (setA.has(elem)) {
+          _intersection.add(elem);
+      }
+  }
+  return _intersection;
+
+// app.post("/friends", async (request: any, response: any) => {
+//   const user_likes = await database.like.findByUserId(request.body.id);
+//   const friend = await database.user.findByEmail(request.body.friend_email);
+//   const friend_likes = await database.like.findByUserId(friend.id);
+
+//   const user_like_ids = new Set([
+//     ...user_likes
+//       .filter(({ liked }: any) => liked == 1)
+//       .map(({ movie_id }: any) => movie_id)
+//   ]);
+
+//   const friend_like_ids = new Set([
+//     ...friend_likes
+//       .filter(({ liked }: any) => liked == 1)
+//       .map(({ movie_id }: any) => movie_id)
+//   ]);
+
+//   const intersection_ids = intersection(friend_like_ids, user_like_ids)
+
+//   response.send({ intersection_ids });
+// });
+
 app.post("/login", async (request: any, response: any) => {
   const user = await database.user.findByEmail(request.body.email);
   if (user) {

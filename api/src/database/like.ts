@@ -12,4 +12,18 @@ const create = async ({ user_id, movie_id, liked }: any) => {
   return dbResponse;
 };
 
-export { create };
+const findByUserId = async (id: any) => {
+  const dbResponse = await knex("user_likes")
+    .select("*")
+    .where("user_id", id);
+  return dbResponse;
+};
+
+const findById = async (user_id: any) => {
+  const dbResponse = await knex("user_likes")
+    .select("*")
+    .where("user_id", user_id);
+  return dbResponse;
+};
+
+export { create, findByUserId, findById };

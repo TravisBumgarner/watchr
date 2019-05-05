@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Switch, Route, Redirect } from 'react-router-dom'
 
-import { Home, Rate, Login, Logout, Navigation, Register } from './components'
+import { Home, Rate, Login, Logout, Navigation, Register, Friends } from './components'
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
     <Route
@@ -49,6 +49,14 @@ const App = () => {
                 <Switch>
                     <Route exact path="/" component={Home} />
                     <PrivateRoute isAuthenticated={isAuthenticated} exact user={user} path="/rate" component={Rate} />
+                    <PrivateRoute
+                        user={user}
+                        isAuthenticated={isAuthenticated}
+                        exact
+                        user={user}
+                        path="/friends"
+                        component={Friends}
+                    />
                     <Route
                         exact
                         path="/login"
