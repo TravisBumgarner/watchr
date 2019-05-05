@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@types/cors": "^2.8.5",
+    "@types/jsonwebtoken": "^8.3.2",
     "@types/uuidv4": "^2.0.0",
     "axios": "^0.18.0",
     "bcrypt": "^3.0.6",

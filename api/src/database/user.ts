@@ -2,14 +2,14 @@ import * as uuid from 'uuidv4'
 
 import knex from './knex'
 
-type NewUserType = {
+type NewUser = {
     first_name: string
     last_name: string
     password: string
     email: string
 }
 
-const create = async ({ first_name, last_name, password, email }: NewUserType) => {
+const create = async ({ first_name, last_name, password, email }: NewUser) => {
     const dbResponse = await knex('users').insert({
         id: uuid(),
         first_name,
@@ -20,8 +20,16 @@ const create = async ({ first_name, last_name, password, email }: NewUserType) =
     return dbResponse
 }
 
-// TODO: what is this return type and also await wtf
-const findByEmail = async (email: string) => {
+// TODO: How to handle this being almost the same as new user?
+type CurrentUser = {
+    first_name: string
+    last_name: string
+    password: string
+    email: string
+    id: string
+}
+
+const findByEmail = async (email: string): Promise<CurrentUser | null> => {
     console.log('email'), email
     const dbResponse = await knex('users')
         .select('*')
@@ -33,4 +41,4 @@ const findByEmail = async (email: string) => {
     }
 }
 
-export { create, findByEmail }
+export { create, findByEmail, CurrentUser as CurrentUserType }
