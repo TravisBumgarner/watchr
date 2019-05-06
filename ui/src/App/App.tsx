@@ -2,7 +2,7 @@ import * as React from 'react'
 import axios from 'axios'
 import { Switch, Route, Redirect } from 'react-router-dom'
 
-import { Login, Logout, Navigation, Register, Friends } from './components/index'
+import { Rate, Login, Logout, Navigation, Register, Friends } from './components/index'
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }: any) => (
     <Route
@@ -48,7 +48,7 @@ const App = () => {
             ) : (
                 <Switch>
                     {/* <Route exact path="/" render={rest => <Home {...rest} />} /> */}
-                    {/* <PrivateRoute isAuthenticated={isAuthenticated} exact user={user} path="/rate" component={Rate} /> */}
+                    <PrivateRoute isAuthenticated={isAuthenticated} exact user={user} path="/rate" component={Rate} />
                     <PrivateRoute
                         user={user}
                         isAuthenticated={isAuthenticated}

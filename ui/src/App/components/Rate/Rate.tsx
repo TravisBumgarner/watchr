@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import * as React from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
 
@@ -23,7 +23,7 @@ const UpVoteButton = styled.button`
     top: 50vh;
 `
 // Next line Figure out next line
-class Rate extends Component<any, any> {
+class Rate extends React.Component<any, any> {
     constructor(props) {
         super(props)
         this.state = {
