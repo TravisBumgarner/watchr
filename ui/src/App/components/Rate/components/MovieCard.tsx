@@ -46,6 +46,7 @@ type Trailer = {
 
 const Poster = styled.img`
     border-radius: 24px;
+    box-shadow: -5px 5px 10px #b5b5b5;
 `
 
 const MovieCard = styled(({ className, id }) => {

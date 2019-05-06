@@ -15,6 +15,12 @@ const theme = {
     font: {
         header: "font-family: 'Oswald', sans-serif",
         body: "font-family: 'Montserrat', sans-serif"
+    },
+    spacing: {
+        // Used for Text
+        small: '0.5rem',
+        medium: '0.7rem',
+        large: '0.9rem'
     }
 }
 

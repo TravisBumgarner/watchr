@@ -3,24 +3,54 @@ import styled from 'styled-components'
 
 import Theme from 'Theme'
 
-const Header = styled(({ level = 'medium', children, className }) => {
+type Props = {
+    className: 'string'
+    children: any
+    level: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+}
+
+const Header = styled(({ level, children, className }: Props) => {
     return <p className={className}>{children}</p>
 })`
     font-family: ${Theme.font.header};
     ${props => {
         switch (props.level) {
             case 'h1':
-                return `font-level: 20px;`
+                return `
+                    font-size: 24px;
+                    margin: ${Theme.spacing.large} 0;
+                    font-weight: 700;
+                `
             case 'h2':
-                return `font-level: 10px;`
+                return `
+                    font-size: 20px;
+                    margin: ${Theme.spacing.large} 0;
+                    font-weight: 700;
+        `
             case 'h3':
-                return `font-level: 15px;`
+                return `
+                    font-size: 16px;
+                    margin: ${Theme.spacing.medium} 0;
+                    font-weight: 700;
+        `
             case 'h4':
-                return `font-level: 15px;`
+                return `
+                    font-size: 16px;
+                    margin: ${Theme.spacing.medium} 0;
+                    font-weight: 700;
+            `
             case 'h5':
-                return `font-level: 15px;`
+                return `
+                    font-size: 16px;
+                    margin: ${Theme.spacing.small} 0;
+                    font-weight: 700;
+                `
             case 'h6':
-                return `font-level: 15px;`
+                return `
+                    font-size: 16px;
+                    margin: ${Theme.spacing.small} 0;
+                    font-weight: 700;
+                `
         }
     }};
 `

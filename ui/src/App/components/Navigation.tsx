@@ -31,7 +31,7 @@ const List = styled.ul`
     display: flex;
 `
 
-const base_links = [{ title: 'Home', route: '/' }]
+const base_links = [{ title: 'Home', route: '/' }, { title: 'About', route: '/about' }]
 const anonymous_links = [{ title: 'Login', route: '/login' }, { title: 'Register', route: '/register' }]
 const authenticated_links = [
     { title: 'Rate', route: '/rate' },
