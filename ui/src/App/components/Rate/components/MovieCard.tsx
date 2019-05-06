@@ -3,38 +3,50 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import { Video } from 'SharedComponents'
-import config from 'Config' //TODO: Get this to work with resolve.
+import config from '../../../../config' //TODO: Get this to work with resolve.
 
-// Sample Card
-// adult: false
-// backdrop_path: "/uZbAaJKJA6EQBRCLxzTJuD5m85P.jpg"
-// belongs_to_collection: null
-// budget: 10500000
-// genres: (4) [{…}, {…}, {…}, {…}]
-// homepage: "http://www.et20.com/"
-// id: 601
-// imdb_id: "tt0083866"
-// original_language: "en"
-// original_title: "E.T. the Extra-Terrestrial"
-// overview: "After a gentle alien becomes stranded on Earth, the being is discovered and befriended by a young boy named Elliott. Bringing the extraterrestrial into his suburban California house, Elliott introduces E.T., as the alien is dubbed, to his brother and his little sister, Gertie, and the children decide to keep its existence a secret. Soon, however, E.T. falls ill, resulting in government intervention and a dire situation for both Elliott and the alien."
-// popularity: 17.545
-// poster_path: "/8htLKK03TJjKZOXJgihZCu8v0P.jpg"
-// production_companies: (2) [{…}, {…}]
-// production_countries: [{…}]
-// release_date: "1982-06-11"
-// revenue: 792965326
-// runtime: 115
-// spoken_languages: [{…}]
-// status: "Released"
-// tagline: "He is afraid. He is alone. He is three million light years from home."
-// title: "E.T. the Extra-Terrestrial"
-// video: false
-// vote_average: 7.5
-// vote_count: 6295
+type Movie = {
+    adult: boolean
+    backdrop_path: string
+    belong_to_collection: any
+    budget: number
+    genres: any
+    homepage: string
+    id: number
+    imdb_id: string
+    original_language: string
+    original_title: string
+    overview: string
+    popularity: number
+    post_path: string
+    production_companies: any
+    production_countries: any
+    release_date: string
+    revenue: number
+    runtime: number
+    spoken_languages: any
+    status: string
+    tagline: string
+    title: string
+    video: boolean
+    vote_average: number
+    vote_count: number
+}
+
+type Trailer = {
+    id: string
+    iso_639_1: string
+    iso_3166_1: string
+    key: string
+    name: string
+    site: string
+    size: number
+    type: 'Trailer'
+}
 
 const MovieCard = styled(({ className, id }) => {
-    const [movieDetails, setMovieDetails] = React.useState<any>(null) //TODO: Fix these
-    const [video, setVideo] = React.useState<any>(null) //TODO: Fix these
+    const [movieDetails, setMovieDetails] = React.useState<Movie | null>(null)
+    const [trailer, setTrailer] = React.useState<Trailer | null>(null)
 
     const getMovieDetails = () => {
         axios
@@ -44,24 +56,26 @@ const MovieCard = styled(({ className, id }) => {
     }
     React.useEffect(getMovieDetails, [id])
 
-    const getVideos = () => {
-        setVideo(null)
+    const getTrailer = () => {
+        setTrailer(null)
         axios
             .get(`${config.tmdbUrl}/movie/${id}/videos?api_key=${config.tmdbKey}`)
             .then(response => {
                 const trailers = response.data.results
                     .filter(result => result.type.toLowerCase() === 'trailer')
                     .filter(result => result.site.toLowerCase() === 'youtube')
-                trailers.length && setVideo(trailers[0])
+                trailers.length && setTrailer(trailers[0])
+                console.log(trailers[0])
             })
             .catch(error => console.log(error))
     }
-    React.useEffect(getVideos, [id])
+    React.useEffect(getTrailer, [id])
+
     return movieDetails ? (
         <div className={className}>
             <h2>{movieDetails.title}</h2>
             <h2>{movieDetails.overview}</h2>
-            {video ? <Video videoKey={video.key} site={video.site} /> : null}
+            {trailer ? <Video videoKey={trailer.key} site={trailer.site} /> : null}
             <img src={`http://image.tmdb.org/t/p/w300///${movieDetails.poster_path}`} />
         </div>
     ) : null
