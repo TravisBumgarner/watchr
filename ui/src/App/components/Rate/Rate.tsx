@@ -1,26 +1,42 @@
 import * as React from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
+import { FaTimes, FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa'
 
 import { MovieCard } from './components/index'
 import { Queue } from 'Utilities'
+import Theme from 'Theme'
 
 const CardWrapper = styled.div`
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 100vw;
+    height: 100vh;
 `
 
-const DownVoteButton = styled.button`
+const DownVoteButton = styled(FaArrowCircleLeft)`
     position: fixed;
     left: 5px;
     top: 50vh;
+    fill: ${Theme.color.primary};
+    cursor: pointer;
+
+    &:hover {
+        fill: ${Theme.color.hover};
+    }
 `
 
-const UpVoteButton = styled.button`
+const UpVoteButton = styled(FaArrowCircleRight)`
     position: fixed;
     right: 5px;
     top: 50vh;
+    fill: ${Theme.color.primary};
+    cursor: pointer;
+
+    &:hover {
+        fill: ${Theme.color.hover};
+    }
 `
 // Next line Figure out next line
 class Rate extends React.Component<any, any> {
@@ -113,8 +129,12 @@ class Rate extends React.Component<any, any> {
         } else {
             content = (
                 <div>
-                    <DownVoteButton onClick={() => this.recordLiked(false)}>Down</DownVoteButton>
-                    <UpVoteButton onClick={() => this.recordLiked(true)}>Up</UpVoteButton>
+                    <DownVoteButton size={Theme.icon.size} onClick={() => this.recordLiked(false)}>
+                        Down
+                    </DownVoteButton>
+                    <UpVoteButton size={Theme.icon.size} onClick={() => this.recordLiked(true)}>
+                        Up
+                    </UpVoteButton>
                     <CardWrapper>
                         <MovieCard id={currentItem.id} />
                     </CardWrapper>

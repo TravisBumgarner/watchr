@@ -44,6 +44,10 @@ type Trailer = {
     type: 'Trailer'
 }
 
+const Poster = styled.img`
+    border-radius: 24px;
+`
+
 const MovieCard = styled(({ className, id }) => {
     const [movieDetails, setMovieDetails] = React.useState<Movie | null>(null)
     const [trailer, setTrailer] = React.useState<Trailer | null>(null)
@@ -73,15 +77,15 @@ const MovieCard = styled(({ className, id }) => {
 
     return movieDetails ? (
         <div className={className}>
-            <h2>{movieDetails.title}</h2>
-            <h2>{movieDetails.overview}</h2>
-            {trailer ? <Video videoKey={trailer.key} site={trailer.site} /> : null}
-            <img src={`http://image.tmdb.org/t/p/w300///${movieDetails.poster_path}`} />
+            {/* <h2>{movieDetails.overview}</h2> */}
+            {/* {trailer ? <Video videoKey={trailer.key} site={trailer.site} /> : null} */}
+            <Poster src={`http://image.tmdb.org/t/p/w300///${movieDetails.poster_path}`} />
+            {/* <h2>{movieDetails.title}</h2> */}
         </div>
     ) : null
 })`
-    width: 50vw;
-    height: 100vh;
+    // width: 50vw;
+    // height: 100vh;
     background-color: ${props => props.color};
 `
 

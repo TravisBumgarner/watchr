@@ -40,6 +40,7 @@ module.exports = {
         alias: {
             SharedComponents: path.resolve(__dirname, 'src/SharedComponents/'),
             Config: path.resolve(__dirname, 'src/config.ts'),
+            Theme: path.resolve(__dirname, 'src/theme.ts'),
             Utilities: path.resolve(__dirname, 'src/utilities')
         }
     },
