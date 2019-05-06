@@ -12,11 +12,10 @@ const Link = styled(ReactRouterLink)`
 
     &:hover {
         color: ${Theme.color.hover};
-        
     }
 `
 
-const Identity = ({ isAuthenticated }) => {
+const Identity = () => {
     return (
         <Wrapper>
             <Link to="/">Watchr</Link>

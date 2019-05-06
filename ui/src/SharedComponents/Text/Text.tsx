@@ -1,9 +1,12 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
+import Theme from 'Theme'
+
 const Text = styled(({ size = 'medium', children, className }) => {
     return <p className={className}>{children}</p>
 })`
+    font-family: ${Theme.font.body};
     ${props => {
         switch (props.size) {
             case 'large':
@@ -14,7 +17,7 @@ const Text = styled(({ size = 'medium', children, className }) => {
             default:
                 return `font-size: 15px;`
         }
-    }}
+    }};
 `
 
 export default Text

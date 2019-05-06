@@ -11,6 +11,10 @@ const theme = {
     },
     border: {
         thickness: '10px'
+    },
+    font: {
+        header: "font-family: 'Oswald', sans-serif",
+        body: "font-family: 'Montserrat', sans-serif"
     }
 }
 

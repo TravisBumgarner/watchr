@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { Rate, Login, Logout, Navigation, Register, Friends, Identity } from './components/index'
+import { Home, Rate, Login, Logout, Navigation, Register, Friends, Identity } from './components/index'
 import Theme, { GlobalStyle } from 'Theme'
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }: any) => (
@@ -77,7 +77,7 @@ const App = () => {
                         <div>Loading.......</div>
                     ) : (
                         <Switch>
-                            {/* <Route exact path="/" render={rest => <Home {...rest} />} /> */}
+                            <Route exact path="/" render={rest => <Home {...rest} />} />
                             <PrivateRoute
                                 isAuthenticated={isAuthenticated}
                                 exact
