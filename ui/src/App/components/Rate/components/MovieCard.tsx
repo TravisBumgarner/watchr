@@ -2,7 +2,8 @@ import * as React from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
 
-import { Video } from 'SharedComponents'
+import Theme from 'Theme'
+import { Video, Text, Header } from 'SharedComponents'
 import config from '../../../../config' //TODO: Get this to work with resolve.
 
 type Movie = {
@@ -44,14 +45,32 @@ type Trailer = {
     type: 'Trailer'
 }
 
+const DetailsWrapper = styled.div`
+    border-radius: 24px;
+    box-shadow: -5px 5px 10px #b5b5b5;
+    width: 300px;
+    height: 450px;
+    background-color: ${Theme.color.accent};
+    padding: ${Theme.spacing.small};
+    box-sizing: border-box;
+    overflow: hidden;
+`
+
 const Poster = styled.img`
     border-radius: 24px;
     box-shadow: -5px 5px 10px #b5b5b5;
 `
 
-const MovieCard = styled(({ className, id }) => {
+const Wrapper = styled.div`
+    cursor: pointer;
+`
+
+const MovieCard = ({ className, id }) => {
     const [movieDetails, setMovieDetails] = React.useState<Movie | null>(null)
     const [trailer, setTrailer] = React.useState<Trailer | null>(null)
+    const [showDetails, toggleShowDetails] = React.useState<boolean>(false)
+
+    React.useEffect(() => toggleShowDetails(false), [id])
 
     const getMovieDetails = () => {
         axios
@@ -70,24 +89,26 @@ const MovieCard = styled(({ className, id }) => {
                     .filter(result => result.type.toLowerCase() === 'trailer')
                     .filter(result => result.site.toLowerCase() === 'youtube')
                 trailers.length && setTrailer(trailers[0])
-                console.log(trailers[0])
             })
             .catch(error => console.log(error))
     }
     React.useEffect(getTrailer, [id])
 
     return movieDetails ? (
-        <div className={className}>
-            {/* <h2>{movieDetails.overview}</h2> */}
-            {/* {trailer ? <Video videoKey={trailer.key} site={trailer.site} /> : null} */}
-            <Poster src={`http://image.tmdb.org/t/p/w300///${movieDetails.poster_path}`} />
-            {/* <h2>{movieDetails.title}</h2> */}
-        </div>
+        <Wrapper onClick={() => toggleShowDetails(!showDetails)}>
+            {showDetails ? (
+                <DetailsWrapper>
+                    <Header level="h2">{movieDetails.title}</Header>
+                    <Text>Popularity: {movieDetails.popularity}</Text>
+                    <Text>Vote Count: {movieDetails.vote_count}</Text>
+                    <Text>Vote Average: {movieDetails.vote_average}</Text>
+                    <Text>{movieDetails.overview}</Text>
+                </DetailsWrapper>
+            ) : (
+                <Poster src={`http://image.tmdb.org/t/p/w300///${movieDetails.poster_path}`} />
+            )}
+        </Wrapper>
     ) : null
-})`
-    // width: 50vw;
-    // height: 100vh;
-    background-color: ${props => props.color};
-`
+}
 
 export default MovieCard

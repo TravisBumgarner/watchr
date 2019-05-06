@@ -4,7 +4,8 @@ const theme = {
     color: {
         primary: '#000',
         secondary: '#fff',
-        hover: '#0066ff'
+        hover: '#0066ff',
+        accent: '#a7f2f340'
     },
     icon: {
         size: '2rem'
