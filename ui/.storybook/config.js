@@ -2,7 +2,7 @@ import { setOptions } from '@storybook/addon-options'
 import { addParameters, configure } from '@storybook/react'
 
 function loadStories() {
-    const req = require.context('../src', true, /\.stories\.js$/)
+    const req = require.context('../src', true, /\.stories\.tsx$/)
     req.keys().forEach(filename => {
         console.log(filename)
         return req(filename)
