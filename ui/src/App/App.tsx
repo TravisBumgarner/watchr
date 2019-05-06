@@ -1,8 +1,10 @@
 import * as React from 'react'
 import axios from 'axios'
 import { Switch, Route, Redirect } from 'react-router-dom'
+import styled from 'styled-components'
 
-import { Rate, Login, Logout, Navigation, Register, Friends } from './components/index'
+import { Rate, Login, Logout, Navigation, Register, Friends, Identity } from './components/index'
+import Theme, { GlobalStyle } from 'Theme'
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }: any) => (
     <Route
@@ -10,6 +12,29 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }: any) =
         render={props => (isAuthenticated === true ? <Component {...rest} /> : <Redirect to="/login" />)}
     />
 )
+
+const WRAPPER_WIDTH = '96vw' // in vw
+const WRAPPER_HEIGHT = '96vh' // in vh
+
+const Wrapper = styled.div`
+    width: ${WRAPPER_WIDTH};
+    height: ${WRAPPER_HEIGHT};
+    margin: 2vh 2vw;
+`
+
+const HeaderWrapper = styled.header`
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: ${Theme.border.tickness} solid ${Theme.color.primary};
+`
+
+const BodyWrapper = styled.main`
+    width: 100%;
+    height: calc(${WRAPPER_HEIGHT} - 50px);
+`
 
 const App = () => {
     const [user, setUser] = React.useState<any>(null) //TODO: Fix these
@@ -41,58 +66,71 @@ const App = () => {
 
     return (
         <>
-            <Navigation isAuthenticated={isAuthenticated} />
-            <div>{user ? `Welcome, User` : 'Welcome!'}</div>
-            {isLoading ? (
-                <div>Loading.......</div>
-            ) : (
-                <Switch>
-                    {/* <Route exact path="/" render={rest => <Home {...rest} />} /> */}
-                    <PrivateRoute isAuthenticated={isAuthenticated} exact user={user} path="/rate" component={Rate} />
-                    <PrivateRoute
-                        user={user}
-                        isAuthenticated={isAuthenticated}
-                        exact
-                        path="/friends"
-                        component={Friends}
-                    />
-                    <Route
-                        exact
-                        path="/login"
-                        render={rest => (
-                            <Login
+            <GlobalStyle />
+            <Wrapper>
+                <HeaderWrapper>
+                    <Identity />
+                    <Navigation isAuthenticated={isAuthenticated} />
+                </HeaderWrapper>
+                <BodyWrapper>
+                    {isLoading ? (
+                        <div>Loading.......</div>
+                    ) : (
+                        <Switch>
+                            {/* <Route exact path="/" render={rest => <Home {...rest} />} /> */}
+                            <PrivateRoute
                                 isAuthenticated={isAuthenticated}
-                                setIsAuthenticated={setIsAuthenticated}
-                                {...rest}
+                                exact
+                                user={user}
+                                path="/rate"
+                                component={Rate}
                             />
-                        )}
-                    />
-                    <Route
-                        exact
-                        path="/register"
-                        render={rest => (
-                            <Register
+                            <PrivateRoute
+                                user={user}
                                 isAuthenticated={isAuthenticated}
-                                setIsAuthenticated={setIsAuthenticated}
-                                {...rest}
+                                exact
+                                path="/friends"
+                                component={Friends}
                             />
-                        )}
-                    />
-                    <PrivateRoute
-                        isAuthenticated={isAuthenticated}
-                        exact
-                        path="/logout"
-                        render={(rest: any) => (
-                            <Logout
+                            <Route
+                                exact
+                                path="/login"
+                                render={rest => (
+                                    <Login
+                                        isAuthenticated={isAuthenticated}
+                                        setIsAuthenticated={setIsAuthenticated}
+                                        {...rest}
+                                    />
+                                )}
+                            />
+                            <Route
+                                exact
+                                path="/register"
+                                render={rest => (
+                                    <Register
+                                        isAuthenticated={isAuthenticated}
+                                        setIsAuthenticated={setIsAuthenticated}
+                                        {...rest}
+                                    />
+                                )}
+                            />
+                            <PrivateRoute
                                 isAuthenticated={isAuthenticated}
-                                setIsAuthenticated={setIsAuthenticated}
-                                {...rest}
+                                exact
+                                path="/logout"
+                                render={(rest: any) => (
+                                    <Logout
+                                        isAuthenticated={isAuthenticated}
+                                        setIsAuthenticated={setIsAuthenticated}
+                                        {...rest}
+                                    />
+                                )}
                             />
-                        )}
-                    />
-                    <Route component={() => <div>Not found</div>} />
-                </Switch>
-            )}
+                            <Route component={() => <div>Not found</div>} />
+                        </Switch>
+                    )}
+                </BodyWrapper>
+            </Wrapper>
         </>
     )
 }

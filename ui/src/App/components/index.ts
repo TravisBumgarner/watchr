@@ -5,5 +5,6 @@ import Logout from './Logout'
 import Register from './Register'
 import Navigation from './Navigation'
 import Friends from './Friends'
+import Identity from './Identity'
 
-export { Rate, Home, Login, Logout, Register, Navigation, Friends }
+export { Rate, Home, Login, Logout, Register, Navigation, Friends, Identity }

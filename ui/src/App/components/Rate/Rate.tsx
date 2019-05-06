@@ -7,18 +7,21 @@ import { MovieCard } from './components/index'
 import { Queue } from 'Utilities'
 import Theme from 'Theme'
 
+const Wrapper = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`
+
 const CardWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100vw;
-    height: 100vh;
 `
 
 const DownVoteButton = styled(FaArrowCircleLeft)`
-    position: fixed;
-    left: 5px;
-    top: 50vh;
     fill: ${Theme.color.primary};
     cursor: pointer;
 
@@ -28,9 +31,6 @@ const DownVoteButton = styled(FaArrowCircleLeft)`
 `
 
 const UpVoteButton = styled(FaArrowCircleRight)`
-    position: fixed;
-    right: 5px;
-    top: 50vh;
     fill: ${Theme.color.primary};
     cursor: pointer;
 
@@ -128,17 +128,17 @@ class Rate extends React.Component<any, any> {
             content = <div>No results</div>
         } else {
             content = (
-                <div>
+                <Wrapper>
                     <DownVoteButton size={Theme.icon.size} onClick={() => this.recordLiked(false)}>
                         Down
                     </DownVoteButton>
-                    <UpVoteButton size={Theme.icon.size} onClick={() => this.recordLiked(true)}>
-                        Up
-                    </UpVoteButton>
                     <CardWrapper>
                         <MovieCard id={currentItem.id} />
                     </CardWrapper>
-                </div>
+                    <UpVoteButton size={Theme.icon.size} onClick={() => this.recordLiked(true)}>
+                        Up
+                    </UpVoteButton>
+                </Wrapper>
             )
         }
 
