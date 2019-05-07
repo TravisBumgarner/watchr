@@ -4,9 +4,15 @@ import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as cors from 'cors'
 import * as jwt from 'jsonwebtoken'
+import * as bcrypt from 'bcryptjs'
 
 import config from './config'
 import * as database from './database'
+
+const hashAndSaltPassword = (password: string): string => {
+    const hash = bcrypt.hashSync(password, config.salt)
+    return hash
+}
 
 // TODO: How do we feel about movies, message, token? Perhaps some type of union type of potential responses.
 type ResponseBody = {
@@ -22,16 +28,25 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+// TODO: Let's not any on the next line
+const ensureAuthenticated = (request: express.Request & any, response: express.Response, next: express.NextFunction) => {
+    if (request.user.isAuthenticated) {
+        return next()
+    } else {
+        return response.status(403).send({ success: false, message: 'Please login' })
+    }
+}
+
 app.use((request: express.Request & any, response: express.Response, next: express.NextFunction) => {
     //TODO: How do I had UserType instead of any above.
+    request.user = { isAuthenticated: false }
     try {
         const token = request.headers.authorization.split(' ')[1]
         jwt.verify(token, config.tokenKey, (error: any, payload: any) => {
-            console.log(payload)
             if (payload) {
                 user.findByEmail(payload.email).then(doc => {
                     if (doc) {
-                        request.user = doc
+                        request.user = { isAuthenticated: true, ...doc }
                         next()
                     }
                 })
@@ -67,6 +82,7 @@ app.get(
 
 app.get(
     '/movies',
+    ensureAuthenticated,
     async (request: express.Request, response: express.Response): Promise<express.Response> => {
         const movies: database.movie.MovieType[] = await database.movie.getList()
 
@@ -81,7 +97,7 @@ app.post(
         const user = await database.user.findByEmail(request.body.email)
         let responseBody: ResponseBody
         if (user) {
-            if (request.body.password === user.password) {
+            if (hashAndSaltPassword(request.body.password) === user.password) {
                 const token = jwt.sign({ email: user.email, first_name: user.first_name, id: user.id }, config.tokenKey)
                 responseBody = {
                     success: true,
@@ -131,6 +147,7 @@ app.post(
 
 app.post(
     '/like',
+    ensureAuthenticated,
     async (request: express.Request, response: express.Response): Promise<express.Response> => {
         const record = await database.like.create({ ...request.body })
         const responseBody: ResponseBody = {
@@ -152,6 +169,9 @@ app.post(
                 message: 'A user with that email address already exists. Please login instead.'
             }
         } else {
+            const hash = hashAndSaltPassword(request.body.password)
+            request.body.password = hash
+
             await database.user.create(request.body)
             const token = jwt.sign(
                 {
