@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import Theme from 'Theme'
 import { Video, Text, Header } from 'SharedComponents'
-import config from '../../../../config' //TODO: Get this to work with resolve.
+import config from 'Config'
 
 type Movie = {
     adult: boolean

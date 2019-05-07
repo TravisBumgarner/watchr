@@ -137,7 +137,9 @@ class Rate extends React.Component<any, any> {
                     <DownVoteButton size={Theme.icon.size} onClick={() => this.recordLiked(false)}>
                         Down
                     </DownVoteButton>
-                    <CardWrapper>{/* <MovieCard id={currentItem.id} /> */}</CardWrapper>
+                    <CardWrapper>
+                        <MovieCard id={currentItem.id} />
+                    </CardWrapper>
                     <UpVoteButton size={Theme.icon.size} onClick={() => this.recordLiked(true)}>
                         Up
                     </UpVoteButton>
