@@ -58,8 +58,9 @@ class Rate extends React.Component<any, any> {
     }
 
     getMovieIds = () => {
+        const token = sessionStorage.getItem('jwtToken')
         axios
-            .get(`${__API__}/movies`)
+            .get(`${__API__}/movies`, { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log('movies', response.data.movies)
                 this.setState({ isLoading: false, areResults: true })
