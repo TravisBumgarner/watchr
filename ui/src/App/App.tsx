@@ -116,16 +116,11 @@ const App = () => {
                                 )}
                             />
                             <PrivateRoute
+                                setIsAuthenticated={setIsAuthenticated}
                                 isAuthenticated={isAuthenticated}
                                 exact
                                 path="/logout"
-                                render={(rest: any) => (
-                                    <Logout
-                                        isAuthenticated={isAuthenticated}
-                                        setIsAuthenticated={setIsAuthenticated}
-                                        {...rest}
-                                    />
-                                )}
+                                component={Logout}
                             />
                             <Route component={() => <div>Not found</div>} />
                         </Switch>

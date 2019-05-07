@@ -53,7 +53,7 @@ const DetailsWrapper = styled.div`
     background-color: ${Theme.color.accent};
     padding: ${Theme.spacing.small};
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: scroll;
 `
 
 const Poster = styled.img`

@@ -5,9 +5,7 @@ import { Redirect } from 'react-router-dom'
 import { Button, Input } from 'SharedComponents'
 
 const Login = ({ isAuthenticated, setIsAuthenticated }) => {
-    console.log(isAuthenticated)
     if (isAuthenticated) {
-        console.log('login redirect')
         return <Redirect to="/" />
     }
 

@@ -3,13 +3,10 @@ import { Redirect } from 'react-router-dom'
 
 import { Button } from 'SharedComponents'
 
-const Logout = ({ isAuthenticated, setIsAuthenticated }) => {
-    if (!isAuthenticated) {
-        return <Redirect to="/" />
-    }
-
+const Logout = ({ setIsAuthenticated }) => {
     const handleLogout = () => {
         sessionStorage.setItem('jwtToken', '')
+        setIsAuthenticated(false)
     }
 
     return (
