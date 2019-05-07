@@ -20,7 +20,6 @@ const create = async ({ first_name, last_name, password, email }: NewUser) => {
     return dbResponse
 }
 
-// TODO: How to handle this being almost the same as new user?
 type CurrentUser = {
     first_name: string
     last_name: string

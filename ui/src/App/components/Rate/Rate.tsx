@@ -85,13 +85,17 @@ class Rate extends React.Component<any, any> {
     recordLiked = wasLiked => {
         const { currentItem } = this.state
         const { user } = this.props
-
+        const token = sessionStorage.getItem('jwtToken')
         axios
-            .post(`${__API__}/like`, {
-                user_id: user.id,
-                movie_id: currentItem.id,
-                liked: wasLiked ? 1 : 0
-            })
+            .post(
+                `${__API__}/like`,
+                {
+                    user_id: user.id,
+                    movie_id: currentItem.id,
+                    liked: wasLiked ? 1 : 0
+                },
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
             .then(response => {})
             .catch(error => {
                 console.log(error)
@@ -132,9 +136,7 @@ class Rate extends React.Component<any, any> {
                     <DownVoteButton size={Theme.icon.size} onClick={() => this.recordLiked(false)}>
                         Down
                     </DownVoteButton>
-                    <CardWrapper>
-                        <MovieCard id={currentItem.id} />
-                    </CardWrapper>
+                    <CardWrapper>{/* <MovieCard id={currentItem.id} /> */}</CardWrapper>
                     <UpVoteButton size={Theme.icon.size} onClick={() => this.recordLiked(true)}>
                         Up
                     </UpVoteButton>
