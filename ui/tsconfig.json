@@ -21,8 +21,9 @@
         "declaration": true,
         "allowSyntheticDefaultImports": true,
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
+        "emitDecoratorMetadata": true,
+        "skipLibCheck": true
     },
-    "include": ["src/**/*", "config.ts"],
+    "include": ["./src/**/*", "config.ts"],
     "exclude": ["node_modules", "build", "scripts"]
 }

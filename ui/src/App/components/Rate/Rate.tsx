@@ -1,11 +1,12 @@
 import * as React from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
-import { FaTimes, FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa'
+import { FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa'
 
 import { MovieCard } from './components/index'
-import { Queue } from 'Utilities'
 import Theme from 'Theme'
+
+import { User } from '../../App'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -38,8 +39,21 @@ const UpVoteButton = styled(FaArrowCircleRight)`
         fill: ${Theme.color.hover};
     }
 `
-// Next line Figure out next line
-class Rate extends React.Component<any, any> {
+
+type State = {
+    isLoading: boolean
+    downVotes: any[]
+    upVotes: any[]
+    currentItem: any
+    areResults: boolean
+    queue: number[]
+}
+
+type Props = {
+    user: User
+}
+
+class Rate extends React.Component<Props, State> {
     constructor(props) {
         super(props)
         this.state = {
@@ -47,9 +61,9 @@ class Rate extends React.Component<any, any> {
             downVotes: [],
             upVotes: [],
             currentItem: undefined,
-            areResults: false
+            areResults: false,
+            queue: []
         }
-        this.queue = new Queue() //TODO: What to do with this line
     }
 
     componentDidMount() {
@@ -59,12 +73,12 @@ class Rate extends React.Component<any, any> {
 
     getMovieIds = () => {
         const token = sessionStorage.getItem('jwtToken')
+        const { queue } = this.state
         axios
             .get(`${__API__}/movies`, { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log('movies', response.data.movies)
-                this.setState({ isLoading: false, areResults: true })
-                this.queue.addArray(response.data.movies)
+                this.setState({ isLoading: false, areResults: true, queue: [...queue, ...response.data.movies] })
                 this.getNextItem()
             })
             .catch(error => {
@@ -74,10 +88,11 @@ class Rate extends React.Component<any, any> {
     }
 
     getNextItem = () => {
-        console.log(this.queue.size(), 'queue')
-        if (this.queue.size() > 0) {
-            this.setState({ currentItem: this.queue.last() })
-            this.queue.remove()
+        const { queue } = this.state
+
+        if (queue.length > 0) {
+            const modifiedQueue = [...queue]
+            this.setState({ currentItem: queue[0], queue: modifiedQueue.slice(1) })
         } else {
             this.setState({ areResults: false })
         }

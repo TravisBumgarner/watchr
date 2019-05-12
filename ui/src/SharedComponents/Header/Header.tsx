@@ -4,12 +4,11 @@ import styled from 'styled-components'
 import Theme from 'Theme'
 
 type Props = {
-    className: 'string'
     children: any
     level: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 }
 
-const Header = styled(({ level, children, className }: Props) => {
+const Header = styled(({ children, className }: Props) => {
     return <p className={className}>{children}</p>
 })`
     font-family: ${Theme.font.header};

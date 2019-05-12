@@ -6,6 +6,11 @@ import styled from 'styled-components'
 import { Home, About, Rate, Login, Logout, Navigation, Register, Friends, Identity } from './components/index'
 import Theme, { GlobalStyle } from 'Theme'
 
+type User = {
+    id: string
+    first_name: string
+} | null
+
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }: any) => (
     <Route
         {...rest}
@@ -28,7 +33,7 @@ const HeaderWrapper = styled.header`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: ${Theme.border.tickness} solid ${Theme.color.primary};
+    border-bottom: ${Theme.border.thickness} solid ${Theme.color.primary};
 `
 
 const BodyWrapper = styled.main`
@@ -37,9 +42,9 @@ const BodyWrapper = styled.main`
 `
 
 const App = () => {
-    const [user, setUser] = React.useState<any>(null) //TODO: Fix these
-    const [isAuthenticated, setIsAuthenticated] = React.useState<any>(false) //TODO: Fix these
-    const [isLoading, setIsLoading] = React.useState<any>(true) //TODO: Fix these
+    const [user, setUser] = React.useState<User>(null)
+    const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false)
+    const [isLoading, setIsLoading] = React.useState<boolean>(true)
 
     const loadUserFromToken = () => {
         const token = sessionStorage.getItem('jwtToken')
@@ -131,4 +136,5 @@ const App = () => {
     )
 }
 
+export { User }
 export default App

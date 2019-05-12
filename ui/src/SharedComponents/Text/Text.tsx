@@ -4,12 +4,11 @@ import styled from 'styled-components'
 import Theme from 'Theme'
 
 type Props = {
-    className: 'string'
     children: any
-    size: 'large' | 'medium' | 'small'
+    size: 'large' | 'medium' | 'small' | undefined
 }
 
-const Text = styled(({ size = 'medium', children, className }: Props) => {
+const Text = styled(({ size = 'medium', children }: Props) => {
     return <p className={className}>{children}</p>
 })`
     font-family: ${Theme.font.body};
@@ -19,10 +18,11 @@ const Text = styled(({ size = 'medium', children, className }: Props) => {
         switch (props.size) {
             case 'large':
                 return `font-size: 20px;`
-            case 'medium':
-                return `font-size: 15px;`
             case 'small':
                 return `font-size: 10px;`
+            case 'medium':
+            default:
+                return `font-size: 15px;`
         }
     }};
 `

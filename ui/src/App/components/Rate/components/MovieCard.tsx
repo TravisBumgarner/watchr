@@ -3,7 +3,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import Theme from 'Theme'
-import { Video, Text, Header } from 'SharedComponents'
+import { Text, Header } from 'SharedComponents'
 import config from 'Config'
 
 type Movie = {
@@ -19,7 +19,7 @@ type Movie = {
     original_title: string
     overview: string
     popularity: number
-    post_path: string
+    poster_path: string
     production_companies: any
     production_countries: any
     release_date: string
@@ -34,16 +34,16 @@ type Movie = {
     vote_count: number
 }
 
-type Trailer = {
-    id: string
-    iso_639_1: string
-    iso_3166_1: string
-    key: string
-    name: string
-    site: string
-    size: number
-    type: 'Trailer'
-}
+// type Trailer = {
+//     id: string
+//     iso_639_1: string
+//     iso_3166_1: string
+//     key: string
+//     name: string
+//     site: string
+//     size: number
+//     type: 'Trailer'
+// }
 
 const DetailsWrapper = styled.div`
     border-radius: 24px;
@@ -67,7 +67,7 @@ const Wrapper = styled.div`
 
 const MovieCard = ({ className, id }) => {
     const [movieDetails, setMovieDetails] = React.useState<Movie | null>(null)
-    const [trailer, setTrailer] = React.useState<Trailer | null>(null)
+    // const [trailer, setTrailer] = React.useState<Trailer | null>(null)
     const [showDetails, toggleShowDetails] = React.useState<boolean>(false)
 
     React.useEffect(() => toggleShowDetails(false), [id])
@@ -80,19 +80,19 @@ const MovieCard = ({ className, id }) => {
     }
     React.useEffect(getMovieDetails, [id])
 
-    const getTrailer = () => {
-        setTrailer(null)
-        axios
-            .get(`${config.tmdbUrl}/movie/${id}/videos?api_key=${config.tmdbKey}`)
-            .then(response => {
-                const trailers = response.data.results
-                    .filter(result => result.type.toLowerCase() === 'trailer')
-                    .filter(result => result.site.toLowerCase() === 'youtube')
-                trailers.length && setTrailer(trailers[0])
-            })
-            .catch(error => console.log(error))
-    }
-    React.useEffect(getTrailer, [id])
+    // const getTrailer = () => {
+    //     setTrailer(null)
+    //     axios
+    //         .get(`${config.tmdbUrl}/movie/${id}/videos?api_key=${config.tmdbKey}`)
+    //         .then(response => {
+    //             const trailers = response.data.results
+    //                 .filter(result => result.type.toLowerCase() === 'trailer')
+    //                 .filter(result => result.site.toLowerCase() === 'youtube')
+    //             trailers.length && setTrailer(trailers[0])
+    //         })
+    //         .catch(error => console.log(error))
+    // }
+    // React.useEffect(getTrailer, [id])
 
     return movieDetails ? (
         <Wrapper onClick={() => toggleShowDetails(!showDetails)}>

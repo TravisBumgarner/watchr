@@ -7,7 +7,7 @@ const About = () => {
         <div>
             <Header level="h2">Page Title.</Header>
             <Header level="h3">Part 1</Header>
-            <Text size="medium">
+            <Text>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
                 dolore magna aliqua. Massa eget egestas purus viverra accumsan in. Nunc consequat interdum varius sit
                 amet mattis vulputate. Scelerisque eu ultrices vitae auctor eu augue. Pellentesque pulvinar pellentesque
@@ -19,7 +19,7 @@ const About = () => {
                 dictumst vestibulum rhoncus. Amet tellus cras adipiscing enim eu turpis. Lacus vestibulum sed arcu non.
             </Text>
             <Header level="h3">Part 2</Header>
-            <Text size="medium">
+            <Text>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
                 dolore magna aliqua. Massa eget egestas purus viverra accumsan in. Nunc consequat interdum varius sit
                 amet mattis vulputate. Scelerisque eu ultrices vitae auctor eu augue. Pellentesque pulvinar pellentesque
