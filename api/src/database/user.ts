@@ -7,15 +7,17 @@ type NewUser = {
     last_name: string
     password: string
     email: string
+    username: string
 }
 
-const create = async ({ first_name, last_name, password, email }: NewUser) => {
+const register = async ({ first_name, last_name, password, email, username }: NewUser) => {
     const dbResponse = await knex('users').insert({
         id: uuid(),
         first_name,
         last_name,
         password,
-        email
+        email,
+        username
     })
     return dbResponse
 }
@@ -26,13 +28,13 @@ type CurrentUser = {
     password: string
     email: string
     id: string
+    username: string
 }
 
-const findByEmail = async (email: string): Promise<CurrentUser | null> => {
-    console.log('email'), email
+const findByUsername = async (username: string): Promise<CurrentUser | null> => {
     const dbResponse = await knex('users')
         .select('*')
-        .where('email', email)
+        .where('username', username)
     if ((await dbResponse.length) === 1) {
         return await dbResponse[0]
     } else {
@@ -40,4 +42,4 @@ const findByEmail = async (email: string): Promise<CurrentUser | null> => {
     }
 }
 
-export { create, findByEmail, CurrentUser as CurrentUserType }
+export { register, findByUsername, CurrentUser as CurrentUserType, NewUser as NewUserType }

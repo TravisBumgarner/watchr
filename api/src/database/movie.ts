@@ -13,4 +13,17 @@ const getList = async (): Promise<Movie[]> => {
     return dbResponse
 }
 
-export { getList, Movie as MovieType }
+const create = async ({ id, original_title, adult, video, popularity }: Movie) => {
+    console.log(id)
+    const dbResponse = await knex('movies').insert({
+        id,
+        original_title,
+        adult,
+        video,
+        popularity
+    })
+    console.log('db', dbResponse)
+    return dbResponse
+}
+
+export { getList, Movie as MovieType, create }

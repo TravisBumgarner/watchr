@@ -9,20 +9,20 @@ const Login = ({ isAuthenticated, setIsAuthenticated }) => {
         return <Redirect to="/" />
     }
 
-    const [email, setEmail] = React.useState<any>('') //TODO: Fix this.
+    const [username, setUsername] = React.useState<any>('') //TODO: Fix this.
     const [password, setPassword] = React.useState<any>('') //TODO: Fix this.
 
     const handleSubmit = () => {
         axios
             .post(`${__API__}/login`, {
                 password,
-                email
+                username
             })
             .then(response => {
                 if (response.data.success) {
                     sessionStorage.setItem('jwtToken', response.data.token)
                     setIsAuthenticated(true)
-                    setEmail('')
+                    setUsername('')
                     setPassword('')
                 } else {
                     console.log('something went wrong with login')
@@ -35,8 +35,8 @@ const Login = ({ isAuthenticated, setIsAuthenticated }) => {
 
     return (
         <div>
-            Email:
-            <Input type="email" onChange={setEmail} value={email} />
+            username:
+            <Input type="text" onChange={setUsername} value={username} />
             Password:
             <Input type="password" onChange={setPassword} value={password} />
             <Button onClick={handleSubmit}>Login</Button>

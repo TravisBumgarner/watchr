@@ -44,7 +44,7 @@ app.use((request: express.Request & any, response: express.Response, next: expre
         const token = request.headers.authorization.split(' ')[1]
         jwt.verify(token, config.tokenKey, (error: any, payload: any) => {
             if (payload) {
-                user.findByEmail(payload.email).then(doc => {
+                user.findByUsername(payload.username).then(doc => {
                     if (doc) {
                         request.user = { isAuthenticated: true, ...doc }
                         next()
@@ -94,11 +94,14 @@ app.get(
 app.post(
     '/login',
     async (request: express.Request, response: express.Response): Promise<express.Response> => {
-        const user = await database.user.findByEmail(request.body.email)
+        const user = await database.user.findByUsername(request.body.username)
         let responseBody: ResponseBody
         if (user) {
             if (hashAndSaltPassword(request.body.password) === user.password) {
-                const token = jwt.sign({ email: user.email, first_name: user.first_name, id: user.id }, config.tokenKey)
+                const token = jwt.sign(
+                    { email: user.email, first_name: user.first_name, id: user.id, username: user.username },
+                    config.tokenKey
+                )
                 responseBody = {
                     success: true,
                     message: 'Welcome!',
@@ -161,21 +164,22 @@ app.post(
 app.post(
     '/register',
     async (request: express.Request, response: express.Response): Promise<express.Response> => {
-        const user = await database.user.findByEmail(request.body.email)
+        const user = await database.user.findByUsername(request.body.username)
         let responseBody: ResponseBody
         if (user) {
             responseBody = {
                 success: false,
-                message: 'A user with that email address already exists. Please login instead.'
+                message: 'A user with that username or email address already exists.'
             }
         } else {
             const hash = hashAndSaltPassword(request.body.password)
             request.body.password = hash
 
-            await database.user.create(request.body)
+            await database.user.register(request.body)
             const token = jwt.sign(
                 {
                     id: request.body.id,
+                    username: request.body.username,
                     email: request.body.email,
                     first_name: request.body.first_name
                 },

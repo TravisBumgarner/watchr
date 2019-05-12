@@ -9,10 +9,11 @@ const Register = ({ isAuthenticated, setIsAuthenticated }) => {
         return <Redirect to="/" />
     }
 
-    const [firstName, setFirstName] = React.useState<any>('') //TODO: Fix this.
-    const [lastName, setLastName] = React.useState<any>('') //TODO: Fix this.
-    const [email, setEmail] = React.useState<any>('') //TODO: Fix this.
-    const [password, setPassword] = React.useState<any>('') //TODO: Fix this.
+    const [firstName, setFirstName] = React.useState<string>('')
+    const [lastName, setLastName] = React.useState<string>('')
+    const [email, setEmail] = React.useState<string>('')
+    const [password, setPassword] = React.useState<string>('')
+    const [username, setUsername] = React.useState<string>('')
 
     const handleSubmit = () => {
         axios
@@ -20,7 +21,8 @@ const Register = ({ isAuthenticated, setIsAuthenticated }) => {
                 password,
                 email,
                 first_name: firstName,
-                last_name: lastName
+                last_name: lastName,
+                username: username
             })
             .then(response => {
                 if (response.data.success) {
@@ -30,6 +32,7 @@ const Register = ({ isAuthenticated, setIsAuthenticated }) => {
                     setPassword('')
                     setFirstName('')
                     setLastName('')
+                    setUsername('')
                 } else {
                     console.log('Registration failed.')
                 }
@@ -45,6 +48,8 @@ const Register = ({ isAuthenticated, setIsAuthenticated }) => {
             <Input type="text" onChange={setFirstName} value={firstName} />
             Last Name:
             <Input type="text" onChange={setLastName} value={lastName} />
+            Username:
+            <Input type="text" onChange={setUsername} value={username} />
             Email:
             <Input type="email" onChange={setEmail} value={email} />
             Password:

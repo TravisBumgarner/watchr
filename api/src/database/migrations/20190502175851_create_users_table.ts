@@ -10,6 +10,10 @@ export async function up(knex: Knex): Promise<any> {
             .text('email')
             .unique()
             .notNullable()
+        table
+            .text('username')
+            .unique()
+            .notNullable()
         table.text('first_name').notNullable()
         table.text('last_name').notNullable()
         table.text('password').notNullable()
