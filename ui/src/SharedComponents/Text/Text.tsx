@@ -5,10 +5,11 @@ import Theme from 'Theme'
 
 type Props = {
     children: any
-    size: 'large' | 'medium' | 'small' | undefined
+    className?: string // TODO: How to not make className optional
+    size?: 'large' | 'medium' | 'small'
 }
 
-const Text = styled(({ size = 'medium', children }: Props) => {
+const Text = styled(({ size = 'medium', children, className }: Props) => {
     return <p className={className}>{children}</p>
 })`
     font-family: ${Theme.font.body};

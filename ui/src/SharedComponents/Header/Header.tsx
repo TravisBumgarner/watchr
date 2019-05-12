@@ -5,6 +5,7 @@ import Theme from 'Theme'
 
 type Props = {
     children: any
+    className?: string //TODO: How to not make className optional
     level: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 }
 
