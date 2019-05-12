@@ -6,6 +6,7 @@ export async function up(knex: Knex): Promise<any> {
         table.uuid('user_id')
         table.integer('movie_id')
         table.boolean('liked')
+        table.boolean('watched')
     })
 }
 

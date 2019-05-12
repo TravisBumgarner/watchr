@@ -6,14 +6,16 @@ type NewLike = {
     user_id: string
     movie_id: string
     liked: boolean
+    watched: boolean
 }
 
-const create = async ({ user_id, movie_id, liked }: NewLike): Promise<number> => {
+const create = async ({ user_id, movie_id, liked, watched }: NewLike): Promise<number> => {
     const dbResponse = await knex('user_likes').insert({
         id: uuid(),
         user_id,
         movie_id,
-        liked
+        liked,
+        watched
     })
     return dbResponse[0]
 }

@@ -1,35 +1,38 @@
 {
-  "name": "api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start:dev": "nodemon server.ts"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/express": "^4.16.1",
-    "@types/node": "^11.13.8",
-    "nodemon": "^1.19.0",
-    "ts-node": "^8.1.0",
-    "tslint": "^5.16.0",
-    "typescript": "^3.4.5"
-  },
-  "dependencies": {
-    "@types/bcryptjs": "^2.4.2",
-    "@types/cors": "^2.8.5",
-    "@types/jsonwebtoken": "^8.3.2",
-    "@types/uuidv4": "^2.0.0",
-    "axios": "^0.18.0",
-    "bcrypt": "^3.0.6",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "express": "^4.16.4",
-    "jsonwebtoken": "^8.5.1",
-    "knex": "^0.16.5",
-    "sqlite3": "^4.0.6",
-    "uuidv4": "^4.0.0"
-  }
+    "name": "api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start:dev": "nodemon server.ts",
+        "migrate:latest": "cd ./src/database && knex migrate:latest --knexfile ./knexfile.ts && cd ../..",
+        "seed:run": "cd ./src/database knex seed:run --knexfile ./knexfile.ts && cd ../..",
+        "migrate:restart": "cd ./src/database && rm ./db.sqlite && npm run migrate:latest && cd ../.."
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/express": "^4.16.1",
+        "@types/node": "^11.13.8",
+        "nodemon": "^1.19.0",
+        "ts-node": "^8.1.0",
+        "tslint": "^5.16.0",
+        "typescript": "^3.4.5"
+    },
+    "dependencies": {
+        "@types/bcryptjs": "^2.4.2",
+        "@types/cors": "^2.8.5",
+        "@types/jsonwebtoken": "^8.3.2",
+        "@types/uuidv4": "^2.0.0",
+        "axios": "^0.18.0",
+        "bcrypt": "^3.0.6",
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.19.0",
+        "cors": "^2.8.5",
+        "express": "^4.16.4",
+        "jsonwebtoken": "^8.5.1",
+        "knex": "^0.16.5",
+        "sqlite3": "^4.0.6",
+        "uuidv4": "^4.0.0"
+    }
 }
