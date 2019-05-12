@@ -9,10 +9,13 @@ const Login = ({ isAuthenticated, setIsAuthenticated }) => {
         return <Redirect to="/" />
     }
 
-    const [username, setUsername] = React.useState<any>('') //TODO: Fix this.
-    const [password, setPassword] = React.useState<any>('') //TODO: Fix this.
+    const [username, setUsername] = React.useState<string>('')
+    const [password, setPassword] = React.useState<string>('')
+    const [loginFailed, setLoginFailed] = React.useState<boolean>(false)
+    const [loginFailedMessage, setLoginFailedMessage] = React.useState<string>('')
 
     const handleSubmit = () => {
+        loginFailed && setLoginFailed(false)
         axios
             .post(`${__API__}/login`, {
                 password,
@@ -24,18 +27,22 @@ const Login = ({ isAuthenticated, setIsAuthenticated }) => {
                     setIsAuthenticated(true)
                     setUsername('')
                     setPassword('')
+                    setLoginFailed(false)
                 } else {
-                    console.log('something went wrong with login')
+                    setLoginFailed(true)
+                    setLoginFailedMessage(response.data.message)
                 }
             })
             .catch(error => {
-                console.log(error)
+                setLoginFailed(true)
+                setLoginFailedMessage('Something went wrong.')
             })
     }
 
     return (
         <div>
-            username:
+            {loginFailed ? <p>{loginFailedMessage}</p> : ''}
+            Username:
             <Input type="text" onChange={setUsername} value={username} />
             Password:
             <Input type="password" onChange={setPassword} value={password} />

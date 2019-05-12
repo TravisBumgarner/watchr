@@ -14,8 +14,11 @@ const Register = ({ isAuthenticated, setIsAuthenticated }) => {
     const [email, setEmail] = React.useState<string>('')
     const [password, setPassword] = React.useState<string>('')
     const [username, setUsername] = React.useState<string>('')
+    const [registerFailed, setRegisterFailed] = React.useState<boolean>(false)
+    const [registerFailedMessage, setRegisterFailedMessage] = React.useState<string>('')
 
     const handleSubmit = () => {
+        registerFailed && setRegisterFailed(false)
         axios
             .post(`${__API__}/register`, {
                 password,
@@ -33,17 +36,21 @@ const Register = ({ isAuthenticated, setIsAuthenticated }) => {
                     setFirstName('')
                     setLastName('')
                     setUsername('')
+                    setRegisterFailed(false)
                 } else {
-                    console.log('Registration failed.')
+                    setRegisterFailed(true)
+                    setRegisterFailedMessage(response.data.message)
                 }
             })
             .catch(error => {
-                console.log(error)
+                setRegisterFailed(true)
+                setRegisterFailedMessage('Something went wrong.')
             })
     }
 
     return (
         <div>
+            {registerFailed ? <p>{registerFailedMessage}</p> : ''}
             First Name:
             <Input type="text" onChange={setFirstName} value={firstName} />
             Last Name:

@@ -164,12 +164,25 @@ app.post(
 app.post(
     '/register',
     async (request: express.Request, response: express.Response): Promise<express.Response> => {
-        const user = await database.user.findByUsername(request.body.username)
         let responseBody: ResponseBody
-        if (user) {
+
+        const userByUsername = await database.user.findByUsername(request.body.username)
+        const userByEmail = await database.user.findByEmail(request.body.email)
+
+        if (userByUsername || userByEmail) {
+            let message
+
+            if (userByUsername && userByEmail) {
+                message = 'Sorry, the username and email address you entered are both taken.'
+            } else if (userByUsername) {
+                message = 'Sorry, the username you entered is already taken.'
+            } else if (userByEmail) {
+                message = 'Sorry, the email address you entered is already taken.'
+            }
+
             responseBody = {
                 success: false,
-                message: 'A user with that username or email address already exists.'
+                message
             }
         } else {
             const hash = hashAndSaltPassword(request.body.password)

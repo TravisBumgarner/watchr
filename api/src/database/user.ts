@@ -42,4 +42,15 @@ const findByUsername = async (username: string): Promise<CurrentUser | null> => 
     }
 }
 
-export { register, findByUsername, CurrentUser as CurrentUserType, NewUser as NewUserType }
+const findByEmail = async (email: string): Promise<CurrentUser | null> => {
+    const dbResponse = await knex('users')
+        .select('*')
+        .where('email', email)
+    if ((await dbResponse.length) === 1) {
+        return await dbResponse[0]
+    } else {
+        return null
+    }
+}
+
+export { register, findByUsername, findByEmail, CurrentUser as CurrentUserType, NewUser as NewUserType }
