@@ -21,6 +21,7 @@ type ResponseBody = {
     message?: string
     token?: string
     user?: {}
+    users?: database.user.RegisteredUserType[]
 }
 
 const app = express()
@@ -87,6 +88,18 @@ app.get(
         const movies: database.movie.MovieType[] = await database.movie.getList()
 
         const responseBody: ResponseBody = { success: true, movies }
+        return response.send(responseBody)
+    }
+)
+
+app.get(
+    '/users',
+    ensureAuthenticated,
+    async (request: express.Request & any, response: express.Response): Promise<express.Response> => {
+        console.log(request.user)
+        const users: database.user.RegisteredUserType[] = await database.user.getAll(request.user.username)
+
+        const responseBody: ResponseBody = { success: true, users }
         return response.send(responseBody)
     }
 )

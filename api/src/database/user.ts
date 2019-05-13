@@ -22,35 +22,35 @@ const register = async ({ first_name, last_name, password, email, username }: Ne
     return dbResponse
 }
 
-type CurrentUser = {
-    first_name: string
-    last_name: string
-    password: string
-    email: string
+type RegisteredUser = {
+    first_name?: string
+    last_name?: string
+    password?: string
+    email?: string
     id: string
     username: string
 }
 
-const findByUsername = async (username: string): Promise<CurrentUser | null> => {
+const getAll = async (currentUser: string): Promise<RegisteredUser[]> => {
+    const dbResponse = await knex('users')
+        .select('id', 'username')
+        .whereNot('username', currentUser)
+    console.log(dbResponse)
+    return await dbResponse
+}
+
+const findByUsername = async (username: string): Promise<RegisteredUser | null> => {
     const dbResponse = await knex('users')
         .select('*')
         .where('username', username)
-    if ((await dbResponse.length) === 1) {
-        return await dbResponse[0]
-    } else {
-        return null
-    }
+    return await dbResponse[0]
 }
 
-const findByEmail = async (email: string): Promise<CurrentUser | null> => {
+const findByEmail = async (email: string): Promise<RegisteredUser | null> => {
     const dbResponse = await knex('users')
         .select('*')
         .where('email', email)
-    if ((await dbResponse.length) === 1) {
-        return await dbResponse[0]
-    } else {
-        return null
-    }
+    return await dbResponse[0]
 }
 
-export { register, findByUsername, findByEmail, CurrentUser as CurrentUserType, NewUser as NewUserType }
+export { register, findByUsername, findByEmail, RegisteredUser as RegisteredUserType, NewUser as NewUserType, getAll }
