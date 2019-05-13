@@ -13,6 +13,14 @@ const getList = async (): Promise<Movie[]> => {
     return dbResponse
 }
 
+const getById = async (id: string): Promise<Movie[]> => {
+    //TODO: This could be optimized to get list of IDs
+    const dbResponse = await knex('movies')
+        .select('*')
+        .where('id', id)
+    return dbResponse
+}
+
 const create = async ({ id, original_title, adult, video, popularity }: Movie) => {
     console.log(id)
     const dbResponse = await knex('movies').insert({
@@ -22,8 +30,7 @@ const create = async ({ id, original_title, adult, video, popularity }: Movie) =
         video,
         popularity
     })
-    console.log('db', dbResponse)
-    return dbResponse
+    return await dbResponse
 }
 
-export { getList, Movie as MovieType, create }
+export { getList, Movie as MovieType, create, getById }

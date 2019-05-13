@@ -31,10 +31,10 @@ type RegisteredUser = {
     username: string
 }
 
-const getAll = async (currentUser: string): Promise<RegisteredUser[]> => {
+const getAllNotCurrentUser = async (id: string): Promise<RegisteredUser[]> => {
     const dbResponse = await knex('users')
         .select('id', 'username')
-        .whereNot('username', currentUser)
+        .whereNot('id', id)
     console.log(dbResponse)
     return await dbResponse
 }
@@ -53,4 +53,4 @@ const findByEmail = async (email: string): Promise<RegisteredUser | null> => {
     return await dbResponse[0]
 }
 
-export { register, findByUsername, findByEmail, RegisteredUser as RegisteredUserType, NewUser as NewUserType, getAll }
+export { register, findByUsername, findByEmail, RegisteredUser as RegisteredUserType, NewUser as NewUserType, getAllNotCurrentUser }

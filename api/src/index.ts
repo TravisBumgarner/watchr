@@ -17,10 +17,11 @@ const hashAndSaltPassword = (password: string): string => {
 // TODO: How do we feel about movies, message, token? Perhaps some type of union type of potential responses.
 type ResponseBody = {
     success: boolean
-    movies?: database.movie.MovieType[]
+    movies?: database.movie.MovieType[] | any //TODO: Change this
     message?: string
     token?: string
     user?: {}
+    likes?: string[]
     users?: database.user.RegisteredUserType[]
 }
 
@@ -93,11 +94,38 @@ app.get(
 )
 
 app.get(
+    '/likes',
+    ensureAuthenticated,
+    async (request: express.Request & any, response: express.Response): Promise<express.Response> => {
+        console.log(request.query)
+        //TODO: Refactor this mess.
+        const friendLikes: database.like.LikeType[] = await database.like.findByUserId(request.query.id)
+        const friendLikeIds: string[] = friendLikes.filter(({ liked }) => liked == true).map(like => like.movie_id)
+
+        const userLikes: database.like.LikeType[] = await database.like.findByUserId(request.user.id)
+        const userLikeIds: string[] = userLikes.filter(({ liked }) => liked == true).map(like => like.movie_id)
+
+        const friendSet = new Set([...friendLikeIds])
+        const userSet = new Set([...userLikeIds])
+        const intersection = new Set([...friendSet].filter(x => userSet.has(x))) // tslint:disable-line
+
+        const movies = await [...intersection].map(async id => {
+            const response = await database.movie.getById(id)
+            return response[0]
+        })
+
+        const movies2 = await Promise.all(movies)
+
+        const responseBody: ResponseBody = { success: true, likes: [...intersection], movies: movies2 }
+        return response.send(responseBody)
+    }
+)
+
+app.get(
     '/users',
     ensureAuthenticated,
     async (request: express.Request & any, response: express.Response): Promise<express.Response> => {
-        console.log(request.user)
-        const users: database.user.RegisteredUserType[] = await database.user.getAll(request.user.username)
+        const users: database.user.RegisteredUserType[] = await database.user.getAllNotCurrentUser(request.user.id)
 
         const responseBody: ResponseBody = { success: true, users }
         return response.send(responseBody)

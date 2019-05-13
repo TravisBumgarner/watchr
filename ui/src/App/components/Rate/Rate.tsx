@@ -146,7 +146,6 @@ class Rate extends React.Component<Props, State> {
         if (!currentItem || !user) {
             return
         }
-
         axios
             .post(
                 `${__API__}/like`,
